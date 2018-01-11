@@ -1,0 +1,9 @@
+{{ if .Params.series }}
+   Series: {{ range $index, $series :=  .Params.series }}
+     {{- if eq $index 0 -}}
+       <a href="/series/{{ urlize . }}">{{ title . }}</a>
+     {{- else -}}
+       , <a href="/series/{{ urlize . }}">{{ title . }}</a>
+     {{- end -}}
+   {{- end -}}
+{{ end }}

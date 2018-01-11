@@ -1,0 +1,19 @@
++++
+date = "2015-05-24T18:51:50+02:00"
+menu = "main"
+title = "About"
+type = "about"
+weight = -190
++++
+
+My name is Oliver Kahl. Let me have an educated guess, that you are as enthusiastic and interested in finance and markets as the many people in the industry I'm daily talking to: be it in person, phone, chat, blog or whatever means of communication. Given that you are also thrilled and excited what rapid change finance has and will experience in the light of brilliant technologies at our fingertips -- probably we have a perfect match. 
+
+Now take this really as a last warning, because the next lines will indeed be about me. Joining the Market virtually seconds before the key events associated with the financial crisis 2007-2008, I've been in different trading roles closely related to the rates market ever since. That being the nucleus of my interests in capital markets, I have always been curious about the fast paced changes this market is going through. Most people would say, those changes were mainly about regulations like the "EMIRs", "MiFIDs" and "Basels" that followed the financial crisis.
+
+But for me that has only blurred ones vision of what is really going on out there:
+
+*Technology has and is on it's way to completely shake up finance.*
+
+Web communities are now able to set up an ecosystem for their own currency and therefore rival central banks. The open source community has set up pricing libraries, big data solutions, machine learning algorithms that can easily outperform the proprietary systems of large financial institutions -- and that is just one click away. Therefore, I will share with you in my articles a tool chain that is mainly free of costs and accessible from basically everywhere.
+
+Now that you have made it bravely through my entire "About me" page, I would like to invite you to follow me on social media as well as to subscribe to my blog. 
