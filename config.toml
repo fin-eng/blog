@@ -1,4 +1,4 @@
-baseurl = "https://github.com/fin-eng/blog.githttps://github.com/fin-eng/blog.git"
+baseurl = "https://fin-eng.github.io/blog/"
 publishDir = "docs"
 title = "My Rates Notebook."
 canonifyurls = true
