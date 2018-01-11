@@ -235,10 +235,48 @@ from strategies relying on both contracts.</p>
 back contract over a pre-defined period of time. So to say, we trade
 out of the "old" contract into the "new" in a linear fashion. For
 instance, if we assume 5 roll over days, we do the weighting according
-to the following scheme: [width="80%", frame="topbot", options=header]
-|=== |Contract   |Day 1 |Day 2 |Day 3 |Day 4 |Day 5 |Front      |80%
-|60%   |40%   |20%   |0% |Back       |20%   |40%   |60%   |80%   |100%
-|=== Applying this method clearly improves the sudden price change
+to the following scheme:</p>
+</div>
+<table class="tableblock frame-topbot grid-all" style="width: 80%;">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Contract</th>
+<th class="tableblock halign-left valign-top">Day 1</th>
+<th class="tableblock halign-left valign-top">Day 2</th>
+<th class="tableblock halign-left valign-top">Day 3</th>
+<th class="tableblock halign-left valign-top">Day 4</th>
+<th class="tableblock halign-left valign-top">Day 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Front</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">80%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">60%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">40%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0%</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Back</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">40%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">60%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">80%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100%</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Applying this method clearly improves the sudden price change
 introduced by switching to a new contract by smoothing the roll over
 according to the weighting scheme. Note that trading has also to be
 set up accordingly to make everything consistent.</p>
@@ -569,7 +607,8 @@ a bit more relaxed towards the method, as roll gaps are not that
 significant.</p>
 </div>
 <div class="paragraph">
-<p>In the <a href="url">next_article</a> of this series we utilize our
+<p>In the <a href="https://fin-eng.github.io/blog/post/continuous_futures_part2/">next
+article</a> of this series we utilize our
 <code>Continuous Futures</code> contract for generating <code>trading signals</code> on
 popular technical analysis measures. We will compare those signals to
 the simple <code>Spliced Contracts</code> benchmark. As technical analysis is a
@@ -586,7 +625,8 @@ measurement and signal generation for example by switching from our
 <code>vectorised</code> approach to an <code>event-driven</code> approach with more granular
 data on intra-day basis. For more discussion on this this, we are
 happy to remind you of the comment section for discussions in this
-direction.</p>
+direction.
+<a href="">link to Jupyter notebook</a></p>
 </div>
 <script>
 var tables, i;
@@ -644,7 +684,7 @@ for (i=0;i<tables.length;i++) {
                     
                     
                     <li>
-                      <a href="https://twitter.com/humboldtux">
+                      <a href="https://twitter.com/">
                         <span class="fa-stack fa-lg">
                           <i class="fa fa-circle fa-stack-2x"></i>
                           <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
@@ -653,7 +693,7 @@ for (i=0;i<tables.length;i++) {
                     </li>
                     
                     <li>
-                      <a href="https://github.com/humboldtux">
+                      <a href="https://github.com/">
                         <span class="fa-stack fa-lg">
                           <i class="fa fa-circle fa-stack-2x"></i>
                           <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -662,7 +702,7 @@ for (i=0;i<tables.length;i++) {
                     </li>
                     
                     <li>
-                      <a href="https://www.facebook.com/FACEBOOKHANDLE">
+                      <a href="https://www.linkedin.com/">
                         <span class="fa-stack fa-lg">
                           <i class="fa fa-circle fa-stack-2x"></i>
                           <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
@@ -671,7 +711,7 @@ for (i=0;i<tables.length;i++) {
                     </li>
                     
                     <li>
-                      <a href="https://www.facebook.com/FACEBOOKHANDLE">
+                      <a href="https://www.xing.com/">
                         <span class="fa-stack fa-lg">
                           <i class="fa fa-circle fa-stack-2x"></i>
                           <i class="fa fa-xing fa-stack-1x fa-inverse"></i>

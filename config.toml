@@ -27,16 +27,17 @@ disqusShortname = "oliverkahl" #delete or comment to disable Disqus comments
 
 [[params.social]]
   title = "twitter"
-  url = "https://twitter.com/humboldtux"
+  url = "https://twitter.com/"
 [[params.social]]
   title = "github"
-  url = "https://github.com/humboldtux"
+  url = "https://github.com/"
 [[params.social]]
   title = "linkedin"
-  url = "https://www.facebook.com/FACEBOOKHANDLE"
+  url = "https://www.linkedin.com/"
 [[params.social]]
   title = "xing"
-  url = "https://www.facebook.com/FACEBOOKHANDLE"
+  url = "https://www.xing.com/"
+
 [[menu.main]]
   name = "home"
   url = "/"

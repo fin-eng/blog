@@ -8,7 +8,7 @@ series = ["Continuous Futures"]
 
 
 = Continuous Futures -- Visualization & Signal Analysis 
-:source-highlighter: pygments 
+:source-highlighter: coderay
 :source-language: python
 :imagesdir: /Users/Olli/Blog_Artikel/
 Oliver Kahl <oliverkahl@gmx.de>
