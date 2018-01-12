@@ -417,7 +417,9 @@ measurement and signal generation for example by switching from our
 data on intra-day basis. For more discussion on this this, we are
 happy to remind you of the comment section for discussions in this
 direction.
-link:{{< relref "blog/content/static/Continuous Futures.jpnb" >}}[link to Jupyter notebook]
+
+{{% staticref "files/continuous_futures.jpynb" %}}*Download Jupyter
+Notebook*{{% /staticref %}}
 
 ++++
 <script>
