@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Collateralized Cash Price --- A consistent pricing framework (part III) -- My Rates Notebook.</title>
+
+    
+
+    
+    <link href="https://fin-eng.github.io/blog//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://fin-eng.github.io/blog//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://fin-eng.github.io/blog/">My Rates Notebook.</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://fin-eng.github.io/blog/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://fin-eng.github.io/blog/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://fin-eng.github.io/blog/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://fin-eng.github.io/blog/contact/">Contact</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://fin-eng.github.io/blog//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Collateralized Cash Price &mdash; A consistent pricing framework (part III)</h1>
+               <h2 class="subheading">We apply a SABR model on the previously calibrated cash IRR, CCP and physical settled swaptions.</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Oliver Kahl</a> on Sun, May 24, 2015
+<br />
+Tags: <a href="https://fin-eng.github.io/blog/tags/swaptions">swaptions</a>, <a href="https://fin-eng.github.io/blog/tags/python">python</a>, <a href="https://fin-eng.github.io/blog/tags/cash-vs.-physical">cash vs. physical</a>
+
+<br />
+
+   Series: <a href="https://fin-eng.github.io/blog/series/cash-vs.-physical-swaptions">Cash vs. Physical Swaptions</a>
+
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the previous article we calibrated cash IRR payer, cash IRR
+receiver and physical vols in the physical measure. These sets of vols
+allowed us to value all settlement types in an arbitrage-free fashion.
+Nevertheless, what we were still lacking, was a complete vol cube for
+every single settlement type. As it is well known that "regular"
+interpolation techniques fail with respect that they are not proven to
+be free of arbitrage, we select the SABR model as a popular choice for
+completing the vol cube.</p>
+</div>
+<div class="paragraph">
+<p>As it is not our main focus here to implement the most
+"sophisticated" version of SABR, but rather an example what is the
+next logical step after calibrating vols from observed market
+premiums, we stick to the basic version of SABR: Hagan et al.
+"Managing Smile Risk". The only amendment we make here is, that
+we explicitly allow for negative rates by utilizing a "shifted"
+version of the original model.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_approaching_calibration">Approaching calibration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As pointed out above, we have flagged vols with three category types:
+"cash receiver", "cash payer" and "physical". These categories go into
+calibration separately. On each category we apply a sorting algorithm
+which is based on the "group-by" operation in Pandas. The logic of the
+grouping is simply that we look how many quotes we have over the full
+range of strikes. We start with those groups having covered all
+strikes with quotes and work our way though to those groups having
+fewer and fewer strikes. Each calibration starts with it&#8217;s neighbours
+parameter outcome (the first calibration has a naive initial guess).
+As there are a lot of expiry/ tail combinations where only ATM quotes
+are available, we use interpolation of the calibrated SABR
+parameters. For this we utilize Scipy "Griddata".</p>
+</div>
+<div class="paragraph">
+<p>One more comment beforehand: As there is a bit of redundancy with
+regards to the SABR parameters, we fix beta at 0.5 (a
+choice often seen in SABR implementations).</p>
+</div>
+<div class="paragraph">
+<p>To get well prepared for calibration we enrich our "vols_sabr_in"
+DataFrame with the parameter columns. Furthermore, we build
+calibration groups according to the number of available quotes over
+the range of strikes. See below:</p>
+</div>
+<div id="img-sabr_in" class="imageblock" style="text-align: left">
+<div class="content">
+<img src="https://fin-eng.github.io/blog/vols_sabr_in.PNG" alt="SABR vols in" width="100%" height="100%">
+</div>
+<div class="title">Figure 1. Vols going into SABR calibration.</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sabr_parameter_calibration">SABR parameter calibration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As outlined above we now give our "groups" into calibration. The
+calibration itself will be done by the SABR class. We drip feed it group
+by group and later interpolate parameters where only ATM quotes are
+available. The algorithm is outlined below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">calib_results = np.empty((0,4))
+for calib_groups in [calib_groups_rec, calib_groups_pay, calib_groups_phy]:
+    for name, group in calib_groups:
+        if name == 0: #where full set of strike data is availiable
+            vol_cube = pd.DataFrame(columns = group.columns,
+            index = group.index, data = group.values)
+            strikes = np.array(vol_cube.columns[2:13])
+            for number, line in enumerate(group.itertuples()):
+                if number == 0: # naive initial parameter guess
+                    sabr_par = SABR(line[1], line[2], line.Index[0] / 12, strikes,
+                                    np.array(line[3:14]), line[16])
+                    vol_cube['alpha'][line.Index] = sabr_par.alpha
+                    vol_cube['rho'][line.Index] = sabr_par.rho
+                    vol_cube['nu'][line.Index] = sabr_par.nu
+                    par_updated = np.array([vol_cube['alpha'][line.Index],
+                                          vol_cube['rho'][line.Index],
+                                          vol_cube['nu'][line.Index]])
+                else: # last parameter outcome as initial guess
+                    sabr_par = SABR(line[1], line[2], line.Index[0] / 12, strikes,
+                                    np.array(line[3:14]), line[16], par_updated)
+                    vol_cube['alpha'][line.Index] = sabr_par.alpha
+                    vol_cube['rho'][line.Index] = sabr_par.rho
+                    vol_cube['nu'][line.Index] = sabr_par.nu
+                    par_updated = np.array([vol_cube['alpha'][line.Index],
+                                          vol_cube['rho'][line.Index],
+                                          vol_cube['nu'][line.Index]])
+        elif 0 &lt; name &lt; 10: #where we have at least one OTM strike with data
+            par_updated = np.array([vol_cube['alpha'][0],
+                                              vol_cube['rho'][0],
+                                              vol_cube['nu'][0]])
+            incr_calib_group = pd.DataFrame(columns = group.columns, index = group.index,
+                                            data = group.values)
+            incr_calib_group.sort_index(ascending=False, inplace = True)
+            for number, line in enumerate(incr_calib_group.itertuples()):
+                sabr_par = SABR(line[1], line[2], line.Index[0] / 12, strikes,
+                                np.array(line[3:14]),line[16], par_updated)
+                incr_calib_group['alpha'][line.Index] = sabr_par.alpha
+                incr_calib_group['rho'][line.Index] = sabr_par.rho
+                incr_calib_group['nu'][line.Index] = sabr_par.nu
+                par_updated = np.array([incr_calib_group['alpha'][line.Index],
+                                              incr_calib_group['rho'][line.Index],
+                                              incr_calib_group['nu'][line.Index]])
+            vol_cube = vol_cube.append(incr_calib_group).sort_index()
+        else: #where we only have ATM strike data we use a combination 'fillna' and interpolation with Scipy Griddata
+            old_x = vol_cube['alpha'].unstack().columns.values
+            old_y = vol_cube['alpha'].unstack().index.values
+            X, Y = np.meshgrid(old_x, old_y)
+            new_x = vols_sabr_in['alpha'].loc['Phy'].unstack().columns.values
+            new_y = vols_sabr_in['alpha'].loc['Phy'].unstack().index.values
+            XI, YI = np.meshgrid(new_x, new_y)
+            temp_par = np.empty((0,294))
+            for par in ['alpha', 'beta', 'rho', 'nu']:
+                if par == 'beta':
+                    temp_par = np.vstack((temp_par, np.tile(0.5, (294,))))
+                else:
+                    vol_cube[par].loc[1, 24]\
+                        = vol_cube[par].unstack().fillna(method='bfill')[24][1]
+                    values = vol_cube[par].unstack().values
+                    interpolated = griddata((X.flatten(), Y.flatten()), values.flatten(),
+                                            (XI, YI), method = 'linear')
+                    interpolated = pd.DataFrame(columns = new_x,
+                                                index = new_y, data = interpolated)
+                    interpolated.fillna(method='ffill', inplace = True)
+                    interpolated.loc[:, :24] = interpolated.loc[:, :24].transpose().fillna(
+                                        method='bfill').transpose()
+                    temp_par = np.vstack((temp_par, interpolated.stack().values))
+            calib_results = np.append(calib_results, temp_par.T, axis = 0)
+vols_sabr_in.iloc[:,14:] = calib_results</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After running through the calibration we now have all the SABR parameters in our "vols_sabr_in" DataFrame.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sabr_vol_calculation">SABR vol calculation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before calling the "SABR_out" method from our SABR class, we do one final parameter calibration and then feed these parameters into "SABR_out" as outlined below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">vols_sabr_out = pd.DataFrame(columns = strikes, index = vols_sabr_in.index)
+calib_results = np.empty((0,4))
+for line in vols_sabr_in.itertuples():
+    sabr_par = SABR(line[1], line[2], line.Index[1] / 12,
+                    strikes, np.array(line[3:14]),line[16],
+        np.array([vols_sabr_in['alpha'][line.Index], vols_sabr_in['rho'][line.Index],
+                  vols_sabr_in['nu'][line.Index]]))
+    calib_results = np.vstack((calib_results, [sabr_par.alpha, 0.5,
+                                               sabr_par.rho, sabr_par.nu]))
+    vols_sabr_out.loc[line.Index] = sabr_par.SABR_out()
+vols_sabr_in.iloc[:,14:] = calib_results</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_inspection_of_the_calibration_results">Inspection of the calibration results</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As a first step, it makes sense to pick those expiry/ tail
+combinations where we have a full range of market quotes. In the
+following we choose four expiry/ tail combinations&#8201;&#8212;&#8201;in the hope to
+capture the majority of the vol structure&#8201;&#8212;&#8201;for our three vol types.
+We inspect the fit visually by Matplotlib charts:</p>
+</div>
+<div id="img-SABR_phy" class="imageblock" style="text-align: left">
+<div class="content">
+<img src="https://fin-eng.github.io/blog/phy_sabr_smile.png" alt="SABR phy smile" width="800" height="600">
+</div>
+<div class="title">Figure 2. Fit SABR vs market for physical (cash CCP) settlement.</div>
+</div>
+<div id="img-SABR_cash_rec" class="imageblock" style="text-align: left">
+<div class="content">
+<img src="https://fin-eng.github.io/blog/cash_rec_sabr_smile.png" alt="SABR cash rec smile" width="800" height="600">
+</div>
+<div class="title">Figure 3. Fit SABR vs market for cash IRR receiver.</div>
+</div>
+<div id="img-SABR_cash_pay" class="imageblock" style="text-align: left">
+<div class="content">
+<img src="https://fin-eng.github.io/blog/cash_pay_sabr_smile.png" alt="SABR cash pay smile" width="800" height="600">
+</div>
+<div class="title">Figure 4. Fit SABR vs market for cash IRR payer.</div>
+</div>
+<div class="paragraph">
+<p>It can been seen that expiry/ tail combinations which lie in the mid
+of the vol structure calibrate best. Longer and shorter combinations
+don&#8217;t fit equally well and also calibration on the wings of the
+distribution exhibit some problems. Those problems are well known with
+SABR and there are extensions to the original model that promise
+better fits.</p>
+</div>
+<div class="paragraph">
+<p>As a last piece, we present a 30y30y smile comparioson between cash IRR receiver, cash IRR payer and physical (CCP) vols similar to the one we already showed in the previous article because here cash/ physical basis should be the most pronounced.</p>
+</div>
+<div id="img-SABR_30y_30y_smile" class="imageblock" style="text-align: left">
+<div class="content">
+<img src="https://fin-eng.github.io/blog/30y30y_swaption_smile.png" alt="SABR 30y30y smile" width="800" height="600">
+</div>
+<div class="title">Figure 5. SABR 30y30y smile for all settlement types.</div>
+</div>
+<div class="paragraph">
+<p>Here as well we see some problems of SABR on the right wing, where
+payers first seem to undershoot and then overshoot a bit, but
+hopefully you can get the picture: A combination of shifted log-vol
+implication, explicit cash-physical model calibration and a SABR model
+is able to yield a pricing maschinery that is able to supply a
+complete vol cubes for all settlement types. Therefore, an
+implementation similar to the one presented here in this series should
+put you in a position to consistently price all standard vanilla
+options.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hagan et al.: "Managing smile risk"</p>
+</div>
+</div>
+</div>
+
+                  
+    
+    <hr/>
+	<p><a href="" id="series"></a>This is a post in the 
+	<b>Cash vs. Physical Swaptions</b> series.<br/>
+	Other posts in this series:</p>
+
+    
+    
+    <ul class="series">
+    
+    	<li>May 19, 2018 -
+    	<a href="https://fin-eng.github.io/blog/post/cash_physical_intro/">Collateralized Cash Price &mdash; An introduction to the new settlement standard in Swaptions</a></li>
+    
+    	<li>May 24, 2015 -
+    	<a href="https://fin-eng.github.io/blog/post/cash_physical_part_i/">Collateralized Cash Price &mdash; A consistent pricing framework (part I)</a></li>
+    
+    	<li>May 24, 2015 -
+    	<a href="https://fin-eng.github.io/blog/post/cash_physical_part_ii/">Collateralized Cash Price &mdash; A consistent pricing framework (part II)</a></li>
+    
+    	<li>May 24, 2015 -
+    	<a href="https://fin-eng.github.io/blog/post/cash_physical_part_iii/">Collateralized Cash Price &mdash; A consistent pricing framework (part III)</a></li>
+    
+    </ul>
+ 
+
+                  
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:oliverkahl@gmx.de">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.linkedin.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.xing.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-xing fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Code released under the Apache 2.0 license.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://fin-eng.github.io/blog//js/jquery.min.js"></script>
+
+    
+    <script src="https://fin-eng.github.io/blog//js/bootstrap.min.js"></script>
+
+    
+    <script src="https://fin-eng.github.io/blog//js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123-45', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
