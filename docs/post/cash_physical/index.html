@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Collateralized Cash Price --- An introduction to the new settlement standard in Swaptions -- My Rates Notebook.</title>
+
+    
+
+    
+    <link href="https://fin-eng.github.io/blog//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://fin-eng.github.io/blog//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://fin-eng.github.io/blog/">My Rates Notebook.</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://fin-eng.github.io/blog/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://fin-eng.github.io/blog/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://fin-eng.github.io/blog/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://fin-eng.github.io/blog/contact/">Contact</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://fin-eng.github.io/blog//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Collateralized Cash Price &mdash; An introduction to the new settlement standard in Swaptions</h1>
+               <h2 class="subheading">Collateralized Cash Price will be effective on 1st of July 2018. We discuss what has to be done to be well prepared.</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Oliver Kahl</a> on Sun, May 24, 2015
+<br />
+Tags: <a href="https://fin-eng.github.io/blog/tags/swaptions">swaptions</a>, <a href="https://fin-eng.github.io/blog/tags/python">python</a>, <a href="https://fin-eng.github.io/blog/tags/cash-vs.-physical">cash vs. physical</a>
+
+<br />
+
+   Series: <a href="https://fin-eng.github.io/blog/series/cash-vs.-physical-swaptions">Cash vs. Physical Swaptions</a>
+
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <div class="sect1">
+<h2 id="_overview">Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For years the <code>Euro Swaption Market</code> was split into two major types of
+settlement methods: one being <code>Physical</code> and the other one being a cash
+settlement based on an <code>Internal Rate of Return (IRR)</code>. The latter was
+causing that many serious valuation problems recently that a new
+market standard will be established effective from 1st of July 2018
+onwards, where the IRR will be "swapped" for a discount rate
+associated with collateralized swap contracts: a <code>Collateralized Cash
+Price (CCP)</code>. But let&#8217;s see what the problem is with the IRR and why
+the CCP perfectly suits into a world of mandatory collaterlization and
+clearing and therefore mimics a physical settlement quite closely.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_the_difference_between_physical_and_cash_irr_settlement_and_why_is_the_latter_causing_trouble">What is the difference between physical and cash IRR settlement and why is the latter causing trouble?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s firstly turn our attention to the physical settlement of
+swaptions because probably the most natural way of thinking about
+swaptions is, when they put into existence one of the most traded
+derivatives contracts in global markets: a fixed vs. float interest
+rate swap. Typically the whole valuation machinery in financial
+institutions rests on swap curves which are physical by their very
+definition. Building an infrastructure for interest rate options on
+top of that layer is a quite straight-forward thing to do. Once up and
+running, our curves projects variable cash-flows out in the future by
+a forward estimation curve, while those variable cash-flows are
+discounted to today together with the already fixed cash-flows with
+another swap curve, the so called discount curve. In essence that
+means, in the physical world, we are perfectly consistent: all swaps
+and physical swaptions are valued with respect to the term
+structure in all relevant swap curves.</p>
+</div>
+<div class="paragraph">
+<p>Turning to the IRR approach now, yields something significantly
+different: The swaption value at expiry is just determined by one
+single swap rate observation. That observation is input for the
+annuity or payoff as well as the discounting and therefore ignores any
+term structure in swap curves. Or more precisely, the IRR approach has
+just one term-structure: a&#8201;&#8212;&#8201;and just this single&#8201;&#8212;&#8201;flat swap curve.</p>
+</div>
+<div class="paragraph">
+<p>Therefore we must acknowledge that cash settled swaptions based on an
+IRR have an underlying that is different to the swaps we are generally
+referring to. Although correlation between the two is high, strictly
+speaking our IRR swap compared to the (physical) swap has to be
+modeled separately to capture it&#8217;s unique dynamics.</p>
+</div>
+<div class="paragraph">
+<p>bla \(C = \alpha + \beta Y^{\gamma} + \epsilon\) bla</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[C = \alpha + \beta Y^{\gamma} + \epsilon\]
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_but_why_has_one_come_up_with_such_a_distorting_convention_in_the_first_place">But why has one come up with such a "distorting" convention in the first place?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For this we fast forward things to the expiry of the IRR swaption and
+see that things get pretty easy with the IRR methodology: all
+we have to know is the swap rate fixing and a bit of plug &amp; chug into
+the IRR formula (PV function in Excel for instance). Very convenient
+thing to do, so no discussion to arrive at the correct settlement
+amount.  And to be fair, valuation differences ignoring the speciality
+of the IRR swaption tend to be limited. So probably the IRR method was
+initially agreed, to make a settlement easy, while ignoring or
+tolerating a "small" valuation issue.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_why_is_the_market_now_deciding_to_move_to_ccp">Why is the market now deciding to move to CCP?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are quite a bunch of arguments around suggesting that
+move: Firstly, since 2008 the market focuses much more on "correctly"
+discounting cash-flows, by reflecting credit, funding and collateral
+involved in derivatives transactions. In that spirit, a CCP is more in
+line with current market standards. Another argument is a steep swap
+curve (where valuation differences are particular strong), and at the
+same time a low rates environment where dealers see many receiver
+swaptions deeply in-the-money. Especially those swaptions already
+substantially in-the-money cause severe valuation issues pushing bid/
+offer spreads to untypically wide levels. Finally, more recent theory
+suggests that arbitrage is not only possible (as it was seen before)
+with trading in CMS style products, but also in vanilla products (i.
+e. swaption collars). A quite active market in zero-wide-collars&#8201;&#8212;&#8201;often traded with one collar settling IRR and the other physical&#8201;&#8212;&#8201;further support this argument. In that context switching standards is
+probably kind of "overdue" and finally was decided by ISDA and global
+dealers.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_does_the_ccp_compare_to_physical_settlement">How does the CCP compare to physical settlement?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>CCP mimics how valuation for the majority of physical swaps is done.
+Therefore the settlement amount due&#8201;&#8212;&#8201;according to CCP&#8201;&#8212;&#8201;is simply the
+value of the physical swap literally the second when the options
+holder opts into exercising the swaption and thereby instantiating the
+swap. Basically, it is expected that there will be no pricing
+differences between CCP and physical settlement as long as those
+contracts are traded under a market standard collateral agreement.
+Documents are structured in a way that certain adjustments are
+possible with regards to some specialities in collateral agreements.
+But as soon as those documents are not in place or business remains
+uncollateralized things get complicated again: typically that is the
+moment where an XVA desk comes into play. But even in this more
+complex situation, it is an advantage to have the risk-free benchmark
+calculated accurately and then adjust for all the "va&#8217;s" afterwards.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_will_happen_to_the_old_irr_swaptions_will_there_still_be_a_market_for_them">What will happen to the old IRR Swaptions? Will there still be a market for them?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>So far global dealers seem committed to further support the market for
+IRR style swaptions. It has to be seen how strong this commitment is
+and whether the market will dry up over a medium- or long term.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_has_to_be_done_to_be_ready_for_the_switch">What has to be done to be ready for the switch?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>That largely depends on where your swaption business is standing. We
+will therefore make case separations for three types of swaption
+businesses.</p>
+</div>
+<div class="paragraph">
+<p><strong><u>Case 1:</u> Large book of physical, cash IRR, and CCP swaptions perspectively with
+already consistent valuation of IRR cash/ physical basis</strong></p>
+</div>
+<div class="paragraph">
+<p>That is the typical setup for a medium to big institution where
+valuation is already consistent for all products. Here the
+adjustment with the new market standard merely boils down to
+maintenance works. For example, calibration inputs are probably
+focused at IRR swaption at the moment because of the highest liquidity
+in that space. So probably that will be fed perspectively from CCP data
+sources as liquidity is expected to move to the new standard.</p>
+</div>
+<div class="paragraph">
+<p><strong><u>Case 2:</u> Large book of physical, cash IRR, and CCP swaptions perspectively with
+IRR cash/ physical basis not implemented</strong></p>
+</div>
+<div class="paragraph">
+<p>That&#8217;s probably where most options approaching this lie. All of them
+have in common that they will incur some PnL effects sooner or later.</p>
+</div>
+<div class="paragraph">
+<p>One option might be to trade out of cash IRR swaptions in advance or
+in the transition to spare implementation of a consistent framework.
+Afterwards input data can be simply switched to the new framework and
+consistency will be achieved for future trades. However, depending on
+the size of the legacy book and the moneyness of those trades that can be
+difficult or costly in terms of what is quoted away from mid by
+dealers.</p>
+</div>
+<div class="paragraph">
+<p>Another option on the menu might be holding on to the legacy book,
+while establishing a consistent pricing framework for legacy trades as
+well as new trades. That carries some implementation costs but saves
+trading cost on closing positions on legacy trades. Potentially a more
+medium- or long-term strategy to get out of IRR swaptions can be
+attached to it as well.</p>
+</div>
+<div class="paragraph">
+<p>One more opportunity might be utilizing providers for switching old IRR
+swaptions into new CCP swaptions. But at the moment those services
+are still in their infancy and it has to be seen how effective those
+will turn out to be.</p>
+</div>
+<div class="paragraph">
+<p><strong><u>Case 3:</u> Book of physical swaptions only, intending to solely trade those in the
+future</strong></p>
+</div>
+<div class="paragraph">
+<p>The seemingly not affected use-case. Looking a bit under the hood
+that assumption might turn out to be wrong. Typically an institution will still
+value their physical swaptions based on IRR swaption volatilities
+because those are associated with being the most liquid grid of input
+data. Once that is changed to CCP, valuation will move and therefore
+an effect can be seen. But probably the way to go in that scenario is
+to just take that one-off effect. Still, timing of the effect might be
+steerable if one holds on feeding IRR volatility from legacy sources.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_does_a_consistent_valuation_in_a_book_with_physical_irr_and_ccp_swaptions_look_like">How does a consistent valuation in a book with Physical, IRR and CCP Swaptions look like?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>That will be the main focus of the next articles in this series.
+Basically, we will do this in three steps:
+Firstly, we lie the foundation by obtaining and formatting the
+needed data. Step two is the heavy lifting, where we calibrate the
+model. Last step will be utilizing a SABR framework on the calibrated
+data to complete the volatility cube for all settlement styles.</p>
+</div>
+</div>
+</div>
+
+                  
+    
+    <hr/>
+	<p><a href="" id="series"></a>This is a post in the 
+	<b>Cash vs. Physical Swaptions</b> series.<br/>
+	Other posts in this series:</p>
+
+    
+    
+    <ul class="series">
+    
+    	<li>May 24, 2015 -
+    	<a href="https://fin-eng.github.io/blog/post/cash_physical/">Collateralized Cash Price --- An introduction to the new settlement standard in Swaptions</a></li>
+    
+    	<li>May 24, 2015 -
+    	<a href="https://fin-eng.github.io/blog/post/cash_physical_implementation/">Collateralized Cash Price --- Building a consistent pricing framework part I</a></li>
+    
+    	<li>May 24, 2015 -
+    	<a href="https://fin-eng.github.io/blog/post/cash_physical_part_ii/">Collateralized Cash Price --- Building a consistent pricing framework part II</a></li>
+    
+    </ul>
+ 
+
+                  
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:oliverkahl@gmx.de">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.linkedin.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.xing.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-xing fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Code released under the Apache 2.0 license.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://fin-eng.github.io/blog//js/jquery.min.js"></script>
+
+    
+    <script src="https://fin-eng.github.io/blog//js/bootstrap.min.js"></script>
+
+    
+    <script src="https://fin-eng.github.io/blog//js/clean-blog.js"></script>
+
+    
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-123-45', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+

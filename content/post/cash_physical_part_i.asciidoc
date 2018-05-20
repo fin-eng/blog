@@ -1,0 +1,128 @@
++++
+date = "2015-05-24T18:53:17+02:00"
+tags = ["Swaptions", "Python", "Cash vs. Physical"]
+title= "Collateralized Cash Price --- A consistent pricing framework (part I)"
+description = "We discuss the inputs, data and formatting needed for building a pricing framework around the various types of swaptions."
+series = ["Cash vs. Physical Swaptions"]
++++
+= Cash Collateralized Price - Building a consistent pricing framework part I
+:source-highlighter: coderay
+:source-language: python
+:imagesdir: /Users/Olli/Blog_Artikel/
+Oliver Kahl <oliverkahl@gmx.de>
+2017-12-14
+
+With the change in the market standard cash
+settlement convention from an `Internal Rate of Return (IRR)` approach
+to `Cash Collateralized Price (CCP)`, effective on 1st July 2018, it
+remains a bit of a challenge to put legacy trades, forthcoming
+new-style transactions, and physically settled contracts into a
+consisting pricing framework.
+
+In this small series we will present a `Python` implementation in which
+all mentioned trades are valued in an arbitrage free fashion.
+Furthermore, we show pitfalls where inconsistencies have been
+introduced in standard implementations around the IRR methodology. 
+We will focus almost entirely on implementation here. Therefore, the
+theoretical foundation will be largely skipped. If that is of
+interest, there are some references at the end of the article. To be
+able to present all pieces in "readable" `Jupyter` Notebook format, we
+spare coding all classes directly in the notebook. Rather we import
+those classes as modules. Everything else will be computed directly in
+the notebook.
+
+Please note that the whole implementation is first and foremost
+dedicated to be illustrative. Therefore, it is neither optimized for
+production nor it is too dogmatic with small details a library would
+be taking care of (e. g. exact daycounts, year fractions, etc.).
+
+We will organise everything as follows: Starting point will be the
+gathering of all needed data (this part), next we will calibrate the
+model itself (next article), and lastly, we complete the data set
+(volatility cube) with a SABR model (part III).
+
+== Getting together our input data
+
+Our inputs will be swaption premiums quoted in the market by various
+broker firms. Those quotes are available for quite granular
+at-the-money (ATM) expiry/ tail combinations for both, IRR and
+physical settlement. Out-of-the-money (OTM) data in contrast is much
+less granular and only available for the IRR style settlement. On top
+of that, we calibrate to ATM zero-wide-collars, which we use to break
+down ATM straddles into its components, as payer and receiver swaption
+at the physical ATM forward don't have equal values (more to this will
+follow). Furthermore, we need swap curve data to calculate payoffs,
+annuities, discount factors, etc. As dual curve calibration is not our
+main focus here, we will feed this data from external sources. Just as
+a remark, there are a lot of data sources available in this regard,
+QuantLib, for instance.
+
+*So let's dive right into implementation!*
+
+First of all, we import a quite lengthy Excel sheet. As a bit of a
+high-level breakdown, there are forwards and discount factors
+calibrated in a library externally. Everything else we need for
+calibration are shifts (to avoid negative rates in our lognormal
+environment) and premiums, which are sorted by ATM data for IRR and
+physical, as well as skew data in form of collars and strangles for
+IRR settlement. That is all written to a dict "market_data" containing
+the information carrying DataFrames.
+
+Now we are already in a position to calculate annuities according to
+IRR (Ann Cash) and physical settlement (PVBP), which we write back to
+"market_data" calling the respective functions. Next step is getting
+ATM premiums for IRR settlement for payer and receiver swaptions
+respectively. That is actually quite simple because we have straddle
+(payer + receiver) and collar (payer - receiver) and can therefore
+back out the needed values.
+
+In the image below you can see the ATM surface for IRR payer
+swaptions:
+
+[#img-atm_premiums]
+.ATM Payer IRR Premiums
+image::/ATM_premiums.png[ATM Premiums, 750, 300]
+
+For smile/ skew data we have quite some editing to do, as this is
+typically delivered for short (Gamma) and long (Vega) expiries in the
+form of collars and strangles at various strikes. Our approach is to
+aggregate all the data in a way, where we have OTM Options (high
+strike = payer, low strike = receiver) around ATM. 
+
+The image below shows our OTM IRR swaption premiums:
+[#img-otm_premiums]
+.OTM IRR Premiums
+image::/OTM_premiums.png[ATM Premiums, 500, 300]
+
+== Aggregating all information into one DataFrame
+
+Now we have all the relevant data, but unfortunately in a number of
+locations, which makes something like a "Master" DataFrame really
+appealing. In principal we are facing something 3-d or a cube here,
+because we have expiry, tail, and strike. So we structure the data
+accordingly, and Pandas, of course, is well prepared for that. One of
+the solutions is a MultiIndex that takes two levels: expiry and tail,
+while strikes are organised in columns. Now we are able to select the
+height in the cube by picking out a columns (ATM, for instance) and
+dive into the surface by simply calling the "unstack()" method -
+something that turns out to be really helpful. The "Master" DataFrame
+now looks like this:
+
+[#img-master_df]
+.Master DataFrame.
+image::/master_df.png[Master DataFrame, 750, 500]
+
+Please also note that the other informations pieces apart from
+premiums are also shown in our Master DataFrame.
+
+Unstacking now makes it very convenient to dive into the ATM surface
+for instance:
+
+[#img-ATM_phy_unstacked]
+.ATM Physical Premiums (unstacked)
+image::/ATM_phy_unstacked.png[Master DataFrame, 750, 500]
+
+Now we have everything that we were looking for in the first part. Our
+Master DataFrame contains all information we later need to calibrate our
+model. That calibration will actually take place in the next
+article.

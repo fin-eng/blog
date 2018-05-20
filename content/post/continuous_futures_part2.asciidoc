@@ -1,11 +1,10 @@
 +++
 date = "2015-05-24T18:53:17+02:00"
 tags = ["Quant Trading", "Python", "Technical Analysis"]
-title = "Continuous Futures: Visualization & Signal Analysis"
+title = "Continuous Futures --- Visualization & Signal Analysis"
 description = "Concepts for Visualization and Signal Analysis in Python"
 series = ["Continuous Futures"]
 +++
-
 
 = Continuous Futures -- Visualization & Signal Analysis 
 :source-highlighter: coderay
@@ -14,32 +13,31 @@ series = ["Continuous Futures"]
 Oliver Kahl <oliverkahl@gmx.de>
 2017-11-12
 
-
 == Overview
 
 In the link:{{< ref "continuous_futures_part1.asciidoc" >}}[first
-article] of this mini series we talked about
-building `Continuous Futures` which satisfy our requirements for
-deriving consistent `PnL` figures for our position keeping, as well as
-generating trading signals not effected by roll gaps between
-contracts. A solution of simply splicing contracts after each other
-clearly didn't qualify, and we came up with the `Panama Method` being
-the closest to an ideal time-series for our data set of `German
-Government Bonds` (Schatz, Bobl, Bund).
+article] of this mini series we talked about building Continuous
+Futures which satisfy our requirements for deriving consistent PnL
+figures for our position keeping, as well as generating trading
+signals not effected by roll gaps between contracts. A solution of
+simply splicing contracts after each other clearly didn't qualify, and
+we came up with the Panama Method being the closest to an ideal
+time-series for our data set of German Government Bonds (Schatz, Bobl,
+Bund).
 
 In this article, we will take a closer look at how trading might be
 effected. Therefore, we pick some prominent technical trading measures
 to represent our signal generation. As a first step we present
-`Exponential Moving Average` (EMA), `Bollinger Bands`, `Moving Average
-Convergence/ Divergence` (MACD), and `Relative Strength Index` (RSI)
-visually in a `Candlestick Chart` format with nice hover effects offered by a
-combination of the `Plotly` and `Cufflinks` library in `Python`.
+Exponential Moving Average (EMA), Bollinger Bands, Moving Average
+Convergence/ Divergence (MACD), and Relative Strength Index (RSI)
+visually in a Candlestick Chart format with nice hover effects offered by a
+combination of the Plotly and Cufflinks library in Python.
 Afterwards, we quantify the signal dates that did change by the
-introduction of our `Continuous Futures` time-series.
+introduction of our Continuous Futures time-series.
 
 Finally, we come to the conclusion that trading signals are heavily
 influenced by the method chosen and that in a serious approach towards
-`Futures` trading, roll gaps should be carefully taken into account.
+Futures trading, roll gaps should be carefully taken into account.
 
 
 == Some basics about charts and technical analysis
@@ -52,7 +50,7 @@ will be provided.
 
 === Charts
 
-For our data set we will utilize so called `Candlestick Charts`. The
+For our data set we will utilize so called Candlestick Charts. The
 chosen data frequency will be represented by one candlestick (daily
 data in our example therefore yields one candlestick per trading day).
 The beauty of this chart form is that we can identify a bunch of
@@ -61,7 +59,7 @@ means: Color will tell, if the market was going up or down. The body
 of the candlestick shows open and close price, while the wicks (yes,
 our trading candle burns in two directions) themselves refer to the
 lowest and highest price on that day. Typically, volume is shown under
-the candlestick to complete `OHLCV` (Open, High, Low, Close, Volume)
+the candlestick to complete OHLCV (Open, High, Low, Close, Volume)
 information. This raw form of the chart is then often enriched with
 visual representation of certain technical analysis studies as an
 overlay or a subplot of the chart.
@@ -112,9 +110,9 @@ Technical Indicators::
 
 === Python Visualization
 
-In the following we will leverage on a combination of the `Plotly` and
-the `Cufflinks` libraries. To enable nice and fast exploring of the
-data in a `Jupyter Notebook` or even here on the web page, we do the
+In the following we will leverage on a combination of the Plotly and
+the Cufflinks libraries. To enable nice and fast exploring of the
+data in a Jupyter Notebook or even here on the web page, we do the
 imports as below (notice that we use Plotly offline here to circumvent
 data communication with the Plotly server):
 [source, python]
@@ -123,9 +121,9 @@ import cufflinks as cf
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 init_notebook_mode(connected=True)
 ----
-Afterwards we basically start with passing a `DataFrame` with `OHLCV`
-data to the `Cufflinks` `QuantFig` class. With this call we
-instantiate our `Candlestick Chart` format and are also able to select
+Afterwards we basically start with passing a DataFrame with OHLCV
+data to the Cufflinks QuantFig class. With this call we
+instantiate our Candlestick Chart format and are also able to select
 some nice features like a range selector for some interactive
 exploring of the data. That first step is done by the following code:
 [source, python]
@@ -158,9 +156,9 @@ for i, j in enumerate(plot_list):
                                     fontsize=12, fontfamily='monospace', x=0, y=1)
         ))
 ----
-`Cufflinks` now makes it very easy to add a bunch of technical
+Cufflinks now makes it very easy to add a bunch of technical
 analysis studies. In former versions this functionality was dependent
-on the `TA-Lib` library, but now it can independently create the
+on the TA-Lib library, but now it can independently create the
 respective numbers. We will add the above outlined studies by writing
 a small function:
 [source, python]
@@ -192,28 +190,28 @@ def cf_objects(qf_list, expiry_dates):
     return plt_list
 ----
 Basically we now have everything together to directly illustrate the
-differences for the various trading signals across our `Continuous
-Futures`. To make the visualization piece a bit more clear, we do some
-formatting and further enrich the `Candlestick Chart` by some
+differences for the various trading signals across our Continuous
+Futures. To make the visualization piece a bit more clear, we do some
+formatting and further enrich the Candlestick Chart by some
 annotations. We spare the code details here, as this is just about
 presenting the data. Probably now the best strategy is to explore the
 figure below by
 yourselves as they have nice hover effects as well as zoom in and out
 capabilities. Please note that generated signals (squares and
-triangles) as well as `Futures` expiry dates (dotted line) are
+triangles) as well as Futures expiry dates (dotted line) are
 directly annotated in the chart).
 
-.*Spliced vs. Panama `Continuous Futures` for `Bund` (the other Futures as link underneath the chart):*
+.*Spliced vs. Panama Continuous Futures for Bund (the other Futures as link underneath the chart):*
 
 {{% readfile file="/static/Bund_Spliced.html" %}}
 
 {{% readfile file="/static/Bund_Panama.html" %}}
 
 You may have encountered that around the annotated contract expiries
-the roll effects have clearly been overcome by the `Panama Method`.
-Also the `Bollinger Bands` for example provide less of a "shock" to
-the standard deviation by the roll as well as some of the `MACD` and
-`RSI` signals around expiry have moved, appeared or disappeared.
+the roll effects have clearly been overcome by the Panama Method.
+Also the Bollinger Bands for example provide less of a "shock" to
+the standard deviation by the roll as well as some of the MACD and
+RSI signals around expiry have moved, appeared or disappeared.
 
 
 === Quantifying the Signals
@@ -221,53 +219,62 @@ the standard deviation by the roll as well as some of the `MACD` and
 Although the chart delivers quite a good feeling for what actually
 happened to the time-series and the various signals, we want to be a
 bit more precise, what actually has changed in terms of counting the
-signals. So let's count signals for `MACD` and `RSI` for `Spliced
-Contracts` first, and then for the `Panama Method`. Afterwards we
+signals. So let's count signals for MACD and RSI for Spliced
+Contracts first, and then for the Panama Method. Afterwards we
 check which signal dates are unique in sense that a signal date for
-`Spliced Contracts` is not in the list for the `Panama Method` et vice
+Spliced Contracts is not in the list for the Panama Method et vice
 versa.
 
 .Signal counting for Spliced vs Panama contracts
 [frame="topbot",options="header"]
 |========================== 
 |Future  |Type    |MACD Signals |RSI Signals 
-.2+|Bund |Spliced |14           |34 
-         |Panama  |14           |26 
-.2+|Bobl |Spliced |12		|29
-        |Panama  |14		|23
-.2+|Schatz  |Spliced |17		|10
-        |Panama  |15		|10
+.2+|Bund |Spliced |18           |34 
+         |Panama  |18           |35 
+.2+|Bobl |Spliced |12		|22
+        |Panama  |16		|19
+.2+|Schatz  |Spliced |21		|18
+        |Panama  |15		|21
 |==========================
 .Unique signals
 [frame="topbot",options="header"]
 |========================== 
 |Future  |Study    |Unique Date 
-.2+|Bund |MACD |14          
-         |RSI|16          
-.2+|Bobl |MACD |16
-        |RSI  |14
-.2+|Schatz  |MACD |16
-        |RSI  |8
+.2+|Bund |MACD |22          
+         |RSI|17          
+.2+|Bobl |MACD |24
+        |RSI  |15
+.2+|Schatz  |MACD |28
+        |RSI  |13
 |==========================
 
-In the above we find that `MACD` signal count didn't changed
-materially, while `RSI` signals -- except from `Schatz` -- came down
-number wise by the introduction of our `Panama Contract`. For `RSI`
-this behavior is intuitively convincing because we kind of
-artificially pushed the time-series to overbought or oversold
-territory by the roll gap delivered with a `Spliced Contract`.
+In the above we find that for the signal counts as a total number
+there are differences but no clear direction in a sense that a certain
+contract type does yield significantly less/ more signals.
 
 With regards to occurrence of a signal on a particular trading day
 uniquely (be it Spliced OR Panama, NOT both), we
-find that `MACD` signals are indeed solely occurring for one contract type
+find that MACD signals are indeed solely occurring for one contract type
 in about 50% of the cases. The equivalent ratio for RSI -- depending on the
-`Futures` -- is between 25% and close to 50%.
+Futures -- is between 25% and close to 50%.
 
 Together these findings clearly indicate that construction of
-`Continuous Futures` time-series needs to be carefully conducted. Our
-example with `German Government Bond Futures` may not be fully
-representative for the whole `Futures` space but nevertheless advices
+Continuous Futures time-series needs to be carefully conducted. Our
+example with German Government Bond Futures may not be fully
+representative for the whole Futures space but nevertheless advices
 for sensible research before trading algorithms are set up.
+
+== References
+
+
+link:https://www.quantstart.com/articles/Continuous-Futures-Contracts-for-Backtesting-Purposes[Continuous
+Futures for Backtesting Purposes]
+
+link:http://www.ipedr.com/vol29/48-CEBMM2012-R00003.pdf[Continuous
+futures data series for back testing and technical analysis]
+
+link:http://www.seykota.com/tribe/TSP/Continuous/index.htm[Continuous
+Contracts]
 
 ++++
 <script>

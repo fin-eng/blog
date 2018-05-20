@@ -9,6 +9,8 @@ copyright = "Code released under the Apache 2.0 license."
 googleAnalytics = "UA-123-45" # delete or comment to disable Google Analytics JS generation
 disqusShortname = "oliverkahl" #delete or comment to disable Disqus comments
 
+smartDashes = true
+
 [taxonomies]
   tag = "tags"
   category = "categories"
