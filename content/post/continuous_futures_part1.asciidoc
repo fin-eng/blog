@@ -433,7 +433,7 @@ futures data series for back testing and technical analysis]
 
 link:http://www.seykota.com/tribe/TSP/Continuous/index.htm[Continuous
 Contracts]
-{{% staticref "files/continuous_futures.jpynb" %}}*Download Jupyter
+{{% staticref "static/files/continuous_futures.jpynb" %}}*Download Jupyter
 Notebook*{{% /staticref %}}
 
 ++++
