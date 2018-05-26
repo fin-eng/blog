@@ -55,15 +55,7 @@
                     </li>
                     
                     <li>
-                        <a href="https://fin-eng.github.io/blog/about/">About</a>
-                    </li>
-                    
-                    <li>
                         <a href="https://fin-eng.github.io/blog/post/">Archives</a>
-                    </li>
-                    
-                    <li>
-                        <a href="https://fin-eng.github.io/blog/contact/">Contact</a>
                     </li>
                     
                   </ul>
@@ -87,7 +79,7 @@
                <h2 class="subheading">We discuss the inputs, data and formatting needed for building a pricing framework around the various types of swaptions.</h2>
                <span class="meta">
                  
-Posted by <a href="#">Oliver Kahl</a> on Sun, May 24, 2015
+Posted by <a href="#">Oliver Kahl</a> on Sat, May 26, 2018
 <br />
 Tags: <a href="https://fin-eng.github.io/blog/tags/swaptions">swaptions</a>, <a href="https://fin-eng.github.io/blog/tags/python">python</a>, <a href="https://fin-eng.github.io/blog/tags/cash-vs.-physical">cash vs. physical</a>
 
@@ -140,13 +132,14 @@ be taking care of (e. g. exact daycounts, year fractions, etc.).</p>
 <div class="paragraph">
 <p>We will organise everything as follows: Starting point will be the
 gathering of all needed data (this part), next we will calibrate the
-model itself (next article), and lastly, we complete the data set
-(volatility cube) with a SABR model (part III).</p>
+model itself <a href="https://fin-eng.github.io/blog/post/cash_physical_part_ii/">(next
+article)</a>, and lastly, we complete the data set
+(volatility cube) with a SABR model <a href="https://fin-eng.github.io/blog/post/cash_physical_part_iii/">(part III)</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_getting_together_our_input_data">Getting together our input data</h2>
+<h2 id="_gathering_our_input_data">Gathering our input data</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Our inputs will be swaption premiums quoted in the market by various
@@ -164,10 +157,7 @@ a remark, there are a lot of data sources available in this regard,
 QuantLib, for instance.</p>
 </div>
 <div class="paragraph">
-<p><strong>So let&#8217;s dive right into implementation!</strong></p>
-</div>
-<div class="paragraph">
-<p>First of all, we import a quite lengthy Excel sheet. As a bit of a
+<p>First of all, we import quite a lengthy Excel sheet. As a bit of a
 high-level breakdown, there are forwards and discount factors
 calibrated in a library externally. Everything else we need for
 calibration are shifts (to avoid negative rates in our lognormal
@@ -177,13 +167,33 @@ IRR settlement. That is all written to a dict "market_data" containing
 the information carrying DataFrames.</p>
 </div>
 <div class="paragraph">
-<p>Now we are already in a position to calculate annuities according to
-IRR (Ann Cash) and physical settlement (PVBP), which we write back to
-"market_data" calling the respective functions. Next step is getting
-ATM premiums for IRR settlement for payer and receiver swaptions
-respectively. That is actually quite simple because we have straddle
-(payer + receiver) and collar (payer - receiver) and can therefore
-back out the needed values.</p>
+<p>Now we have everything together to calculate cash IRR and physical
+annuities. As those are very central to our implementation, we will
+write down the two formulas below:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[Physical Annuity = \sum\limits_{n=1}^N \frac{1}{(1+r_{n})^n}\]
+</div>
+</div>
+<div class="stemblock">
+<div class="content">
+\[CashIRRAnnuity = \frac{1}{R}(1-\frac{1}{(1+R)^{N}})\]
+</div>
+</div>
+<div class="paragraph">
+<p>With the N payments, you see that on the physical annuity every nth
+cash flow has a unique discount rate. With the cash IRR formula you
+just observe one forward rate "R", which solely serves as valuation
+input.</p>
+</div>
+<div class="paragraph">
+<p>Now we are calculating all the annuities for our DataFrame, which we
+write back to "market_data" calling the respective functions. Next
+step is getting ATM premiums for IRR settlement for payer and receiver
+swaptions respectively. That is actually quite simple because we have
+straddle (payer + receiver) and collar (payer - receiver) and can
+therefore back out the needed values.</p>
 </div>
 <div class="paragraph">
 <p>In the image below you can see the ATM surface for IRR payer
@@ -257,6 +267,19 @@ article.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_downloads">Downloads</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://www.icloud.com/iclouddrive/0V7R2YhvMf3NbjIUNXKtA2gvw#Market_Data_Prep">
+Jupyter Notebook</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.icloud.com/iclouddrive/09fWSLA8cbQHRC7LmLoPM6CaQ#swaption_market_data">
+Excel Sheet</a></p>
+</div>
+</div>
+</div>
 
                   
     
@@ -269,16 +292,16 @@ article.</p>
     
     <ul class="series">
     
-    	<li>May 19, 2018 -
+    	<li>May 26, 2018 -
     	<a href="https://fin-eng.github.io/blog/post/cash_physical_intro/">Collateralized Cash Price &mdash; An introduction to the new settlement standard in Swaptions</a></li>
     
-    	<li>May 24, 2015 -
+    	<li>May 26, 2018 -
     	<a href="https://fin-eng.github.io/blog/post/cash_physical_part_i/">Collateralized Cash Price &mdash; A consistent pricing framework (part I)</a></li>
     
-    	<li>May 24, 2015 -
+    	<li>May 26, 2018 -
     	<a href="https://fin-eng.github.io/blog/post/cash_physical_part_ii/">Collateralized Cash Price &mdash; A consistent pricing framework (part II)</a></li>
     
-    	<li>May 24, 2015 -
+    	<li>May 26, 2018 -
     	<a href="https://fin-eng.github.io/blog/post/cash_physical_part_iii/">Collateralized Cash Price &mdash; A consistent pricing framework (part III)</a></li>
     
     </ul>
