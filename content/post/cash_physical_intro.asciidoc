@@ -1,5 +1,5 @@
 +++
-date = "2018-05-19T10:53:17+02:00"
+date = "2018-05-26T12:54:17+02:00"
 tags = ["Swaptions", "Python", "Cash vs. Physical"]
 title= "Collateralized Cash Price --- An introduction to the new settlement standard in Swaptions"
 description = "Collateralized Cash Price will be effective on 1st of July 2018. We discuss what has to be done to be well prepared."
@@ -55,13 +55,6 @@ IRR have an underlying that is different to the swaps we are generally
 referring to. Although correlation between the two is high, strictly
 speaking our IRR swap compared to the (physical) swap has to be
 modeled separately to capture it's unique dynamics.
-
-bla latexmath:[C = \alpha + \beta Y^{\gamma} + \epsilon] bla
-
-[latexmath]
-++++++++++++++++++++++++++++++++++++++++++++
-\[C = \alpha + \beta Y^{\gamma} + \epsilon\]
-++++++++++++++++++++++++++++++++++++++++++++
 
 == But why has one come up with such a "distorting" convention in the first place?
 

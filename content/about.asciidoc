@@ -4,6 +4,7 @@ menu = "main"
 title = "About"
 type = "about"
 weight = -190
+draft = true
 +++
 
 My name is Oliver Kahl. Let me have an educated guess, that you are as enthusiastic and interested in finance and markets as the many people in the industry I'm daily talking to: be it in person, phone, chat, blog or whatever means of communication. Given that you are also thrilled and excited what rapid change finance has and will experience in the light of brilliant technologies at our fingertips -- probably we have a perfect match. 

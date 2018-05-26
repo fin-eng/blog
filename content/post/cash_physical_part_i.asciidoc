@@ -1,5 +1,5 @@
 +++
-date = "2015-05-24T18:53:17+02:00"
+date = "2018-05-26T12:53:17+02:00"
 tags = ["Swaptions", "Python", "Cash vs. Physical"]
 title= "Collateralized Cash Price --- A consistent pricing framework (part I)"
 description = "We discuss the inputs, data and formatting needed for building a pricing framework around the various types of swaptions."
@@ -38,10 +38,12 @@ be taking care of (e. g. exact daycounts, year fractions, etc.).
 
 We will organise everything as follows: Starting point will be the
 gathering of all needed data (this part), next we will calibrate the
-model itself (next article), and lastly, we complete the data set
-(volatility cube) with a SABR model (part III).
+model itself link:{{< ref "cash_physical_part_ii.asciidoc" >}}[(next
+article)], and lastly, we complete the data set
+(volatility cube) with a SABR model link:{{< ref
+"cash_physical_part_iii.asciidoc" >}}[(part III)].
 
-== Getting together our input data
+== Gathering our input data
 
 Our inputs will be swaption premiums quoted in the market by various
 broker firms. Those quotes are available for quite granular
@@ -57,9 +59,7 @@ main focus here, we will feed this data from external sources. Just as
 a remark, there are a lot of data sources available in this regard,
 QuantLib, for instance.
 
-*So let's dive right into implementation!*
-
-First of all, we import a quite lengthy Excel sheet. As a bit of a
+First of all, we import quite a lengthy Excel sheet. As a bit of a
 high-level breakdown, there are forwards and discount factors
 calibrated in a library externally. Everything else we need for
 calibration are shifts (to avoid negative rates in our lognormal
@@ -68,13 +68,31 @@ physical, as well as skew data in form of collars and strangles for
 IRR settlement. That is all written to a dict "market_data" containing
 the information carrying DataFrames.
 
-Now we are already in a position to calculate annuities according to
-IRR (Ann Cash) and physical settlement (PVBP), which we write back to
-"market_data" calling the respective functions. Next step is getting
-ATM premiums for IRR settlement for payer and receiver swaptions
-respectively. That is actually quite simple because we have straddle
-(payer + receiver) and collar (payer - receiver) and can therefore
-back out the needed values.
+Now we have everything together to calculate cash IRR and physical
+annuities. As those are very central to our implementation, we will
+write down the two formulas below:
+
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Physical Annuity = \sum\limits_{n=1}^N \frac{1}{(1+r_{n})^n}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[latexmath]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+CashIRRAnnuity = \frac{1}{R}(1-\frac{1}{(1+R)^{N}})
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+With the N payments, you see that on the physical annuity every nth
+cash flow has a unique discount rate. With the cash IRR formula you
+just observe one forward rate "R", which solely serves as valuation
+input.
+
+Now we are calculating all the annuities for our DataFrame, which we
+write back to "market_data" calling the respective functions. Next
+step is getting ATM premiums for IRR settlement for payer and receiver
+swaptions respectively. That is actually quite simple because we have
+straddle (payer + receiver) and collar (payer - receiver) and can
+therefore back out the needed values.
 
 In the image below you can see the ATM surface for IRR payer
 swaptions:
@@ -126,3 +144,13 @@ Now we have everything that we were looking for in the first part. Our
 Master DataFrame contains all information we later need to calibrate our
 model. That calibration will actually take place in the next
 article.
+
+== Downloads
+
+
+https://www.icloud.com/iclouddrive/0V7R2YhvMf3NbjIUNXKtA2gvw#Market_Data_Prep[
+Jupyter Notebook]
+
+
+https://www.icloud.com/iclouddrive/09fWSLA8cbQHRC7LmLoPM6CaQ#swaption_market_data[
+Excel Sheet]
