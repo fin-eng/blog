@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Code released under the Apache 2.0 license.</copyright>
-    <lastBuildDate>Sat, 26 May 2018 12:54:17 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2015 18:51:50 +0200</lastBuildDate>
     
 	<atom:link href="https://fin-eng.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>About</title>
+      <link>https://fin-eng.github.io/blog/about/</link>
+      <pubDate>Sun, 24 May 2015 18:51:50 +0200</pubDate>
+      
+      <guid>https://fin-eng.github.io/blog/about/</guid>
+      <description>My name is Oliver Kahl. Before I introduce myself properly, allow me to guess, that you are as enthusiastic and interested in finance and markets as the many people in the industry I am daily talking to: be it in person, phone, chat, blog or whatever means of communication. Given that you are also thrilled and excited what rapid change finance has and will experience in the light of brilliant technologies at our fingertips&amp;#8201;&amp;#8212;&amp;#8201;probably we have a perfect match.</description>
+    </item>
     
     <item>
       <title>Collateralized Cash Price --- An introduction to the new settlement standard in Swaptions</title>

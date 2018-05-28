@@ -55,6 +55,10 @@
                     </li>
                     
                     <li>
+                        <a href="https://fin-eng.github.io/blog/about/">About</a>
+                    </li>
+                    
+                    <li>
                         <a href="https://fin-eng.github.io/blog/post/">Archives</a>
                     </li>
                     
@@ -210,12 +214,17 @@ are far from being "complete". At this stage we also have no
 information on physical smile data. But let&#8217;s inspect something, which
 is already complete, namely the ATM physical swaption surface:</p>
 </div>
-<div id="img-master_df" class="paragraph">
-<div class="title">ATM physical swaption surface.</div>
-<p>image::/ATM_physical_swaption_surface.png[ATM physical swaption
-surface, width = "100%", height= "100%", align = "left"]
-== Align cash IRR and physical (cash CCP) vols</p>
+<div id="img-ATM_phy_vol" class="imageblock" style="text-align: left">
+<div class="content">
+<img src="https://fin-eng.github.io/blog/ATM_physical_swaption_surface.png" alt="ATM physical swaption surface" width="100%" height="100%">
 </div>
+<div class="title">Figure 2. ATM physical swaption surface.</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_align_cash_irr_and_physical_cash_ccp_vols">Align cash IRR and physical (cash CCP) vols</h2>
+<div class="sectionbody">
 <div class="sect2">
 <h3 id="_description_of_the_approach">Description of the approach</h3>
 <div class="paragraph">
@@ -301,7 +310,7 @@ forward)</p>
 <div class="content">
 <img src="https://fin-eng.github.io/blog/cash_phy_cal_input.PNG" alt="Cash Phy ATM" width="100%">
 </div>
-<div class="title">Figure 2. Cash/ physical ATM calibration input.</div>
+<div class="title">Figure 3. Cash/ physical ATM calibration input.</div>
 </div>
 </div>
 <div class="sect2">
@@ -358,7 +367,7 @@ now looks like this:</p>
 <div class="content">
 <img src="https://fin-eng.github.io/blog/sabr_cal_input.PNG" alt="Cash Phy ATM" width="100%" height="100%">
 </div>
-<div class="title">Figure 3. Cash/ physical OTM calibration input (goes into SABR calibration later)</div>
+<div class="title">Figure 4. Cash/ physical OTM calibration input (goes into SABR calibration later)</div>
 </div>
 <div class="paragraph">
 <p>The following piece of code in combination with the "CashPhyOTM" class
@@ -425,11 +434,11 @@ cash IRR receiver, cash IRR payer and physical (cash CCP). That is
 exactly what we were after. So let&#8217;s inspect how the different vols
 relate to each other:</p>
 </div>
-<div id="img-10y10y_smile" class="imageblock">
+<div id="img-10y10y_smile" class="imageblock" style="text-align: left">
 <div class="content">
-<img src="https://fin-eng.github.io/blog/10y10y_swaption_smile.png" alt="10y10y smile" width="100%" height="100%">
+<img src="https://fin-eng.github.io/blog/10y10y_swaption_smile.png" alt="10y10y swaption smile" width="800" height="600">
 </div>
-<div class="title">Figure 4. 10y10y swaption smile with different settlement types.</div>
+<div class="title">Figure 5. 10y10y swaption smile with different settlement types.</div>
 </div>
 <div class="paragraph">
 <p>Note that if we would move to the cash IRR measure, we would observe different vols for payer and receiver for physical settlement. Therefore another interesting comparison in that space is, how physical and cash IRR forwards relate to each other. The following is a table of cash IRR forwards over physical forwards in BP:</p>
@@ -438,7 +447,7 @@ relate to each other:</p>
 <div class="content">
 <img src="https://fin-eng.github.io/blog/cash_over_phy_fwds.PNG" alt="cash over phy forwards" width="100%" height="100%">
 </div>
-<div class="title">Figure 5. Convexity adjusted cash IRR Forwards over physical forwards in BP.</div>
+<div class="title">Figure 6. Convexity adjusted cash IRR Forwards over physical forwards in BP.</div>
 </div>
 <div class="paragraph">
 <p>We see that the convexity adjustment is most pronounced on the bottom
@@ -540,7 +549,7 @@ s.setAttribute('data-timestamp', +new Date());
                     
                     
                     <li>
-                      <a href="https://twitter.com/">
+                      <a href="https://twitter.com/KahlOliver">
                         <span class="fa-stack fa-lg">
                           <i class="fa fa-circle fa-stack-2x"></i>
                           <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>

@@ -111,10 +111,10 @@ are far from being "complete". At this stage we also have no
 information on physical smile data. But let's inspect something, which
 is already complete, namely the ATM physical swaption surface:
 
-[#img-master_df]
+[#img-ATM_phy_vol]
 .ATM physical swaption surface.
-image::/ATM_physical_swaption_surface.png[ATM physical swaption
-surface, width = "100%", height= "100%", align = "left"]
+image::/ATM_physical_swaption_surface.png[ATM physical swaption surface, width = "100%", height= "100%", align = "left"]
+
 == Align cash IRR and physical (cash CCP) vols
 
 === Description of the approach
@@ -280,7 +280,7 @@ relate to each other:
 
 [#img-10y10y_smile]
 .10y10y swaption smile with different settlement types.
-image::/10y10y_swaption_smile.png[10y10y smile, height = "100%", width = "100%"]
+image::/10y10y_swaption_smile.png[10y10y swaption smile, 800, 600, align = "left"]
 
 Note that if we would move to the cash IRR measure, we would observe different vols for payer and receiver for physical settlement. Therefore another interesting comparison in that space is, how physical and cash IRR forwards relate to each other. The following is a table of cash IRR forwards over physical forwards in BP:
 
