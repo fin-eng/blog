@@ -35,10 +35,10 @@ smartDashes = true
   url = "https://github.com/"
 [[params.social]]
   title = "linkedin"
-  url = "https://www.linkedin.com/"
+  url = "https://www.linkedin.com/in/oliver-kahl-cfa-20077039/"
 [[params.social]]
   title = "xing"
-  url = "https://www.xing.com/"
+  url = "https://www.xing.com/profile/Oliver_Kahl8/cv/"
 
 [[menu.main]]
   name = "home"
