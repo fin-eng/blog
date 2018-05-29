@@ -17,7 +17,7 @@ Oliver Kahl <oliverkahl@gmx.de>
 For years the `Euro Swaption Market` was split into two major types of
 settlement methods: one being `Physical` and the other one being a cash
 settlement based on an `Internal Rate of Return (IRR)`. The latter was
-causing that many serious valuation problems recently that a new
+causing that many serious valuation problems recently, that a new
 market standard will be established effective from 1st of July 2018
 onwards, where the IRR will be "swapped" for a discount rate
 associated with collateralized swap contracts: a `Collateralized Cash
@@ -32,29 +32,29 @@ swaptions because probably the most natural way of thinking about
 swaptions is, when they put into existence one of the most traded
 derivatives contracts in global markets: a fixed vs. float interest
 rate swap. Typically the whole valuation machinery in financial
-institutions rests on swap curves which are physical by their very
+institutions rests on swap curve which are physical by their very
 definition. Building an infrastructure for interest rate options on
 top of that layer is a quite straight-forward thing to do. Once up and
 running, our curves projects variable cash-flows out in the future by
 a forward estimation curve, while those variable cash-flows are
 discounted to today together with the already fixed cash-flows with
-another swap curve, the so called discount curve. In essence that
-means, in the physical world, we are perfectly consistent: all swaps
+another swap curve: the so called discount curve. In essence that
+means, in the physical world, we are perfectly consistent, all swaps
 and physical swaptions are valued with respect to the term
 structure in all relevant swap curves.
 
 Turning to the IRR approach now, yields something significantly
-different: The swaption value at expiry is just determined by one
+different: the swaption value at expiry is just determined by one
 single swap rate observation. That observation is input for the
 annuity or payoff as well as the discounting and therefore ignores any
 term structure in swap curves. Or more precisely, the IRR approach has
 just one term-structure: a -- and just this single -- flat swap curve.
 
-Therefore we must acknowledge that cash settled swaptions based on an
+Therefore, we must acknowledge that cash settled swaptions based on an
 IRR have an underlying that is different to the swaps we are generally
 referring to. Although correlation between the two is high, strictly
 speaking our IRR swap compared to the (physical) swap has to be
-modeled separately to capture it's unique dynamics.
+modeled separately to capture its unique dynamics.
 
 == But why has one come up with such a "distorting" convention in the first place?
 
@@ -63,9 +63,9 @@ see that things get pretty easy with the IRR methodology: all
 we have to know is the swap rate fixing and a bit of plug & chug into
 the IRR formula (PV function in Excel for instance). Very convenient
 thing to do, so no discussion to arrive at the correct settlement
-amount.  And to be fair, valuation differences ignoring the speciality
-of the IRR swaption tend to be limited. So probably the IRR method was
-initially agreed, to make a settlement easy, while ignoring or
+amount.  And to be fair, valuation differences, ignoring the speciality
+of the IRR swaption, tend to be limited. So probably the IRR method was
+initially agreed to make a settlement easy, while ignoring or
 tolerating a "small" valuation issue.
 
 == Why is the market now deciding to move to CCP?
@@ -92,7 +92,7 @@ dealers.
 
 CCP mimics how valuation for the majority of physical swaps is done.
 Therefore the settlement amount due -- according to CCP -- is simply the
-value of the physical swap literally the second when the options
+value of the physical swap literally the second, when the options
 holder opts into exercising the swaption and thereby instantiating the
 swap. Basically, it is expected that there will be no pricing
 differences between CCP and physical settlement as long as those
@@ -138,13 +138,13 @@ One option might be to trade out of cash IRR swaptions in advance or
 in the transition to spare implementation of a consistent framework.
 Afterwards input data can be simply switched to the new framework and
 consistency will be achieved for future trades. However, depending on
-the size of the legacy book and the moneyness of those trades that can be
+the size of the legacy book and the moneyness of those trades, that can be
 difficult or costly in terms of what is quoted away from mid by
 dealers.
 
 Another option on the menu might be holding on to the legacy book,
 while establishing a consistent pricing framework for legacy trades as
-well as new trades. That carries some implementation costs but saves
+well as new trades. That carries some implementation costs, but saves
 trading cost on closing positions on legacy trades. Potentially a more
 medium- or long-term strategy to get out of IRR swaptions can be
 attached to it as well.
@@ -157,14 +157,14 @@ will turn out to be.
 *+++<u>Case 3:</u>+++ Book of physical swaptions only, intending to solely trade those in the
 future*
 
-The seemingly not affected use-case. Looking a bit under the hood
+The seemingly not affected use-case. Looking a bit under the hood,
 that assumption might turn out to be wrong. Typically an institution will still
 value their physical swaptions based on IRR swaption volatilities
 because those are associated with being the most liquid grid of input
 data. Once that is changed to CCP, valuation will move and therefore
 an effect can be seen. But probably the way to go in that scenario is
 to just take that one-off effect. Still, timing of the effect might be
-steerable if one holds on feeding IRR volatility from legacy sources.
+steerable, if one holds on feeding IRR volatility from legacy sources.
 
 == How does a consistent valuation in a book with Physical, IRR and CCP Swaptions look like?
 
