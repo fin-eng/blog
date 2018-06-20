@@ -1,8 +1,8 @@
 +++
-date = "2018-05-26T12:54:17+02:00"
+date = "2018-06-20T12:54:17+02:00"
 tags = ["Swaptions", "Python", "Cash vs. Physical"]
 title= "Collateralized Cash Price --- An introduction to the new settlement standard in Swaptions"
-description = "Collateralized Cash Price will be effective on 1st of July 2018. We discuss what has to be done to be well prepared."
+description = "Collateralized Cash Price will be effective by Sep/ Oct 2018. We discuss what has to be done to be well prepared."
 series = ["Cash vs. Physical Swaptions"]
 +++
 = Collateralized Cash Price - An introduction to the new settlement standard in Swaptions
@@ -17,13 +17,27 @@ Oliver Kahl <oliverkahl@gmx.de>
 For years the `Euro Swaption Market` was split into two major types of
 settlement methods: one being `Physical` and the other one being a cash
 settlement based on an `Internal Rate of Return (IRR)`. The latter was
-causing that many serious valuation problems recently, that a new
-market standard will be established effective from 1st of July 2018
-onwards, where the IRR will be "swapped" for a discount rate
-associated with collateralized swap contracts: a `Collateralized Cash
-Price (CCP)`. But let's see what the problem is with the IRR and why
-the CCP perfectly suits into a world of mandatory collaterlization and
-clearing and therefore mimics a physical settlement quite closely.
+causing that many serious valuation problems recently that a new
+market standard will be established, effective from a date not yet
+specified in September or October 2018 onwards, where the IRR will be
+"swapped" for a discount rate associated with collateralized swap
+contracts: a `Collateralized Cash Price (CCP)`. But let's see what the
+problem is with the IRR and why the CCP perfectly suits into a world
+of mandatory collaterlization and clearing and therefore mimics a
+physical settlement quite closely.
+
+== Why was the original date for going-live in July delayed?
+
+Basically there had been issues in the documentation with regards to
+the discount factors needed for the cash settlement amount. In the
+original documentation, those discount factors were linked to a static
+ISDA matrix, referencing EONIA rates for Euro. As those reference
+rates in the matrix are potentially replaced by new risk-free rates in
+the near future, the suggested documentation could run into trouble
+pretty soon. The industry therefore decided to link the discount rate
+to interest rates applied to variation margin by clearing houses. That
+twist may turn out to be more suitable for whatever comes out of the
+decisions to be made around risk-free rates.
 
 == What is the difference between physical and cash IRR settlement and why is the latter causing trouble?
 

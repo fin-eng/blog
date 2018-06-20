@@ -14,8 +14,8 @@ Oliver Kahl <oliverkahl@gmx.de>
 
 With the change in the market standard cash
 settlement convention from an `Internal Rate of Return (IRR)` approach
-to `Cash Collateralized Price (CCP)`, effective on 1st July 2018, it
-remains a bit of a challenge to put legacy trades, forthcoming
+to `Cash Collateralized Price (CCP)`, effective in September or
+October 2018, remains a bit of a challenge to put legacy trades, forthcoming
 new-style transactions, and physically settled contracts into a
 consisting pricing framework.
 
