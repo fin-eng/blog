@@ -24,10 +24,10 @@
     <item>
       <title>Collateralized Cash Price --- An introduction to the new settlement standard in Swaptions</title>
       <link>https://fin-eng.github.io/blog/post/cash_physical_intro/</link>
-      <pubDate>Wed, 20 Jun 2018 12:54:17 +0200</pubDate>
+      <pubDate>Wed, 07 Nov 2018 12:54:17 +0200</pubDate>
       
       <guid>https://fin-eng.github.io/blog/post/cash_physical_intro/</guid>
-      <description>Overview For years the Euro Swaption Market was split into two major types of settlement methods: one being Physical and the other one being a cash settlement based on an Internal Rate of Return (IRR). The latter was causing that many serious valuation problems recently that a new market standard will be established, effective from a date not yet specified in September or October 2018 onwards, where the IRR will be &#34;</description>
+      <description>Overview For years the Euro Swaption Market was split into two major types of settlement methods: one being Physical and the other one being a cash settlement based on an Internal Rate of Return (IRR). The latter was causing that many serious valuation problems recently that a new market standard will be established, effective from 26th November 2018 onwards, where the IRR will be &#34;swapped&#34; for a discount rate associated with collateralized swap contracts: a Collateralized Cash Price (CCP).</description>
     </item>
     
     <item>
