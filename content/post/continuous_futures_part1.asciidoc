@@ -5,13 +5,8 @@ title = "Continuous Futures --- Construction Methods"
 description = "Building a Continuous Futures Contract with Python"
 series = ["Continuous Futures"]
 +++
-= Continuous Futures: Construction Methods
-:source-highlighter: coderay 
+=== Overview 
 :source-language: python
-Oliver Kahl <oliverkahl@gmx.de>
-2017-11-12
-
-== Overview
 
 Futures are an excellent way of gaining access and exposure to
 various asset classes. The contracts are often much more liquid than
@@ -48,9 +43,9 @@ all the code involved to make everything outlined here easy to
 replicate by yourself. 
 
 
-== Some basics about Futures trading 
+=== Some basics about Futures trading 
 
-=== Futures terminology
+==== Futures terminology
 
 Before we will carry out a certain methodology, we will visit some
 common procedures to generate a continuous time-series. For all this,
@@ -68,7 +63,7 @@ possible price movement and tick value is the loss or gain incurred
 by that movement.
 
 
-=== Basis between subsequent Futures contracts
+==== Basis between subsequent Futures contracts
 
 So first of all, we have to ask, why there is a difference in the
 price in subsequent Futures contracts at all? To gain an
@@ -82,10 +77,10 @@ gap between two contracts. Depending on the market, those influence
 factors can be repo rates, dividends, storage costs, etc.
 
 
-== Building a Continuous Futures contract
+=== Building a Continuous Futures contract
 
 
-=== Available methods at a glance
+==== Available methods at a glance
 
 Before we start implementing algorithms to come up with a Continuous
 Futures time-series, we will shortly discuss the most prominent
@@ -151,7 +146,7 @@ time series trending away substantially from the original Futures
 prices. 
 
 
-== Determine the method of choice for a Continuous Futures with our data set
+=== Determine the method of choice for a Continuous Futures with our data set
 
 From the above discussion the Panama Adjustment as well as the
 Perpetual Method sound promising. We will test the two and benchmark
@@ -161,7 +156,7 @@ Reuters Eikon Futures contracts being fetched by the Python API. We
 will then process the observed data in Python, analyze the outcomes,
 and pick our method of choice.
 
-=== Spliced contracts
+==== Spliced contracts
 
 As mentioned above, we we pick German Government Bond Futures
 (Schatz, Bobl, Bund) for our analysis. We collect daily OHLCV
@@ -222,7 +217,7 @@ sudden drop in the time-series.
 image::/continuous_futures/roll_gap.png[Spliced]
 
 
-=== Perpetual Method
+==== Perpetual Method
 
 To implement the Perpetual Method as outlined above, we define a
 function "get_perp_fut". The function basically takes the already
@@ -308,7 +303,7 @@ hugely complex trading in case we want to do this consistently to our
 rollover.
 
 
-=== Panama Method
+==== Panama Method
 
 Here we proceed basically the same like above: From our simple spliced
 contracts we form a smooth time series by defining a Python function
@@ -398,7 +393,7 @@ buyer.
 image::/continuous_futures/panama_method_2000.png[Panama_2000]
 
 
-== Our method of choice
+=== Our method of choice
 
 With the rather large gaps between contracts in our time series, we
 choose the Panama Method over the Perpetual Method. This is
@@ -423,11 +418,11 @@ measurement and signal generation for example by switching from our
 vectorised approach to an event-driven approach with more granular
 data on intra-day basis. 
 
-== Downloads
+=== Downloads
 
 link:https://www.icloud.com/iclouddrive/0Rgvba4u92ecCsQgZ1cwlF-FQ#Continuous_Futures[Jupyter Notebook]
 
-== References
+=== References
 
 link:https://www.quantstart.com/articles/Continuous-Futures-Contracts-for-Backtesting-Purposes[Continuous
 Futures for Backtesting Purposes]

@@ -5,15 +5,9 @@ title = "Continuous Futures --- Visualization & Signal Analysis"
 description = "Concepts for Visualization and Signal Analysis in Python"
 series = ["Continuous Futures"]
 +++
-
-= Continuous Futures -- Visualization & Signal Analysis 
-:source-highlighter: coderay
+=== Overview
 :source-language: python
 :imagesdir: /Users/Olli/Blog_Artikel/
-Oliver Kahl <oliverkahl@gmx.de>
-2017-11-12
-
-== Overview
 
 In the link:{{< ref "continuous_futures_part1.asciidoc" >}}[first
 article] of this mini series we talked about building Continuous
@@ -40,7 +34,7 @@ influenced by the method chosen and that in a serious approach towards
 Futures trading, roll gaps should be carefully taken into account.
 
 
-== Some basics about charts and technical analysis
+=== Some basics about charts and technical analysis
 
 In this section we briefly clarify the terminology around
 charts and technical analysis which is later used in our analysis. As
@@ -48,7 +42,7 @@ we can only touch the surface here, some links to further readings
 will be provided.
 
 
-=== Charts
+==== Charts
 
 For our data set we will utilize so called Candlestick Charts. The
 chosen data frequency will be represented by one candlestick (daily
@@ -65,7 +59,7 @@ visual representation of certain technical analysis studies as an
 overlay or a subplot of the chart.
 
 
-=== Technical analysis
+==== Technical analysis
 
 In it's very basic form, technical analysis makes use of past data
 (mainly OHLCV) to predict future price movements. There is a vast
@@ -81,10 +75,10 @@ Bands], link:https://www.investopedia.com/terms/m/macd.asp[MACD], and
 link:https://www.investopedia.com/terms/r/rsi.asp[RSI].
 
 
-== Building charts and technical indicators
+=== Building charts and technical indicators
 
 
-=== Outlining our approach and the parameter settings
+==== Outlining our approach and the parameter settings
 
 Since we have quite a few objects that we want to compute and
 visualize, here is a summary of what we are about to present:
@@ -108,7 +102,7 @@ Technical Indicators::
 ** 20 periods considered
 
 
-=== Python Visualization
+==== Python Visualization
 
 In the following we will leverage on a combination of the Plotly and
 the Cufflinks libraries. To enable nice and fast exploring of the
@@ -202,11 +196,14 @@ triangles) as well as Futures expiry dates (dotted line) are
 directly annotated in the chart).
 
 .*Spliced vs. Panama Continuous Futures for Bund (the other Futures as link underneath the chart):*
-
+++++
 {{% readfile file="/static/Bund_Spliced.html" %}}
-
+++++
+{empty} +
+++++
 {{% readfile file="/static/Bund_Panama.html" %}}
-
+++++
+{empty} +
 You may have encountered that around the annotated contract expiries
 the roll effects have clearly been overcome by the Panama Method.
 Also the Bollinger Bands for example provide less of a "shock" to
@@ -264,7 +261,7 @@ example with German Government Bond Futures may not be fully
 representative for the whole Futures space but nevertheless advices
 for sensible research before trading algorithms are set up.
 
-== References
+=== References
 
 
 link:https://www.quantstart.com/articles/Continuous-Futures-Contracts-for-Backtesting-Purposes[Continuous

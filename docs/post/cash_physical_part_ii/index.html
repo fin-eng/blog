@@ -104,8 +104,8 @@ Tags: <a href="https://fin-eng.github.io/blog/tags/swaptions">swaptions</a>, <a 
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  <div id="preamble">
-<div class="sectionbody">
+                  <div class="sect2">
+<h3 id="_overview">Overview</h3>
 <div class="paragraph">
 <p>In the previous article, we gathered all the data needed. We will now
 utilize that information to calibrate our model. As it takes some
@@ -119,10 +119,8 @@ Jupyter Notebook. For our modelling we use Pietersz and Sengers
 "Cash-settled swaptions: A new pricing model".</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_vol_implication">Vol Implication</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_vol_implication">Vol Implication</h3>
 <div class="paragraph">
 <p>The first step will be the implying of a shifted-log-normal volatility
 for all the premiums we collected this far. For this we will use the
@@ -142,7 +140,7 @@ transform all the premiums into vols and print it back to a new,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">for line in cash_prem.itertuples():
+<pre class="highlight"><code class="language-python" data-lang="python">for line in cash_prem.itertuples():
     for col in cash_prem.columns[5:]:
         if np.isnan(cash_prem[col][line.Index]):
             continue
@@ -214,19 +212,17 @@ are far from being "complete". At this stage we also have no
 information on physical smile data. But let&#8217;s inspect something, which
 is already complete, namely the ATM physical swaption surface:</p>
 </div>
-<div id="img-ATM_phy_vol" class="imageblock" style="text-align: left">
+<div id="img-ATM_phy_vol" class="imageblock text-left">
 <div class="content">
 <img src="https://fin-eng.github.io/blog/ATM_physical_swaption_surface.png" alt="ATM physical swaption surface" width="100%" height="100%">
 </div>
 <div class="title">Figure 2. ATM physical swaption surface.</div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_align_cash_irr_and_physical_cash_ccp_vols">Align cash IRR and physical (cash CCP) vols</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_description_of_the_approach">Description of the approach</h3>
+<h3 id="_align_cash_irr_and_physical_cash_ccp_vols">Align cash IRR and physical (cash CCP) vols</h3>
+<div class="sect3">
+<h4 id="_description_of_the_approach">Description of the approach</h4>
 <div class="paragraph">
 <p>Thus far we did nothing more than a regular (shifted) Black log-normal
 vol implication. The "CashPhyATM" superclass and it&#8217;s "CashPhyOTM"
@@ -313,8 +309,8 @@ forward)</p>
 <div class="title">Figure 3. Cash/ physical ATM calibration input.</div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_atm_calibration">ATM calibration</h3>
+<div class="sect3">
+<h4 id="_atm_calibration">ATM calibration</h4>
 <div class="paragraph">
 <p>The following shows, how we iterate over the "vols" DataFrame and call
 the respective methods from the "CashPhyATM" class, to obtain the
@@ -322,7 +318,7 @@ above sketched out measures with regard to the ATM point:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">for line in vols.itertuples():
+<pre class="highlight"><code class="language-python" data-lang="python">for line in vols.itertuples():
     if line[11] == line[12]:
         vols['ATM Cash*'][line.Index[0]][line.Index[1]] = line[11]
         vols['Shift*'][line.Index[0]][line.Index[1]] = line[4]
@@ -348,8 +344,8 @@ above sketched out measures with regard to the ATM point:</p>
 <p>Now we have added all calibrated ATM parameters to our DataFrame.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_otm_calibration">OTM calibration</h3>
+<div class="sect3">
+<h4 id="_otm_calibration">OTM calibration</h4>
 <div class="paragraph">
 <p>In the next step, we move away from the ATM point and calibrate all
 our grid points for OTM, where we observe market quotes. By using
@@ -375,7 +371,7 @@ will fill the "vols_sabr_in" DataFrame for us:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">for line in vols.itertuples():
+<pre class="highlight"><code class="language-python" data-lang="python">for line in vols.itertuples():
     for strike_number, strike_offset in enumerate(vols_sabr_in.columns[2:].values):
         if strike_offset &lt; 0:
             if np.isnan(line[14 + strike_number]):
@@ -424,17 +420,15 @@ what the model is able to do for us.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_visual_inspection_of_the_calibrated_data">Visual inspection of the calibrated data</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_visual_inspection_of_the_calibrated_data">Visual inspection of the calibrated data</h3>
 <div class="paragraph">
 <p>Now we essentially have three types of vols at the physical measure:
 cash IRR receiver, cash IRR payer and physical (cash CCP). That is
 exactly what we were after. So let&#8217;s inspect how the different vols
 relate to each other:</p>
 </div>
-<div id="img-10y10y_smile" class="imageblock" style="text-align: left">
+<div id="img-10y10y_smile" class="imageblock text-left">
 <div class="content">
 <img src="https://fin-eng.github.io/blog/10y10y_swaption_smile.png" alt="10y10y swaption smile" width="800" height="600">
 </div>
@@ -463,10 +457,8 @@ a robust cube, is the SABR model. This is exactly what will be done in
 the next article.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_references">References</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_references">References</h3>
 <div class="paragraph">
 <p>Pietersz and Sengers: "Cash-settled swaptions: A new pricing model"</p>
 </div>
@@ -474,17 +466,14 @@ the next article.</p>
 <p>Jaeckel: "By Implication"</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_downloads">Downloads</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_downloads">Downloads</h3>
 <div class="paragraph">
 <p><a href="https://www.icloud.com/iclouddrive/0dheBGT5FInwZriY9cDREilcQ#Cash_Phy_Cal">Jupyter Notebook</a></p>
 </div>
 <div class="paragraph">
 <p><a href="https://www.icloud.com/iclouddrive/0siyCpWsFFyHU3IxW4nfzswdw#cash_physical_model">Cash
 Physical Model</a></p>
-</div>
 </div>
 </div>
 
@@ -601,14 +590,17 @@ s.setAttribute('data-timestamp', +new Date());
     <script src="https://fin-eng.github.io/blog//js/clean-blog.js"></script>
 
     
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-123-45', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
 
 

@@ -5,12 +5,11 @@ title= "Collateralized Cash Price --- A consistent pricing framework (part I)"
 description = "We discuss the inputs, data and formatting needed for building a pricing framework around the various types of swaptions."
 series = ["Cash vs. Physical Swaptions"]
 +++
-= Cash Collateralized Price - Building a consistent pricing framework part I
+=== Overview
+
 :source-highlighter: coderay
 :source-language: python
 :imagesdir: /Users/Olli/Blog_Artikel/
-Oliver Kahl <oliverkahl@gmx.de>
-2017-12-14
 
 With the change in the market standard cash
 settlement convention from an `Internal Rate of Return (IRR)` approach
@@ -43,7 +42,7 @@ article)], and lastly, we complete the data set
 (volatility cube) with a SABR model link:{{< ref
 "cash_physical_part_iii.asciidoc" >}}[(part III)].
 
-== Gathering our input data
+=== Gathering our input data
 
 Our inputs will be swaption premiums quoted in the market by various
 broker firms. Those quotes are available for quite granular
@@ -112,7 +111,7 @@ The image below shows our OTM IRR swaption premiums:
 .OTM IRR Premiums
 image::/OTM_premiums.png[ATM Premiums, 500, 300]
 
-== Aggregating all information into one DataFrame
+=== Aggregating all information into one DataFrame
 
 Now we have all the relevant data, but unfortunately in a number of
 locations, which makes something like a "Master" DataFrame really
@@ -145,7 +144,7 @@ Master DataFrame contains all information we later need to calibrate our
 model. That calibration will actually take place in the next
 article.
 
-== Downloads
+=== Downloads
 
 
 https://www.icloud.com/iclouddrive/0V7R2YhvMf3NbjIUNXKtA2gvw#Market_Data_Prep[

@@ -104,8 +104,8 @@ Tags: <a href="https://fin-eng.github.io/blog/tags/swaptions">swaptions</a>, <a 
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  <div id="preamble">
-<div class="sectionbody">
+                  <div class="sect2">
+<h3 id="_overview">Overview</h3>
 <div class="paragraph">
 <p>With the change in the market standard cash
 settlement convention from an <code>Internal Rate of Return (IRR)</code> approach
@@ -141,10 +141,8 @@ article)</a>, and lastly, we complete the data set
 (volatility cube) with a SABR model <a href="https://fin-eng.github.io/blog/post/cash_physical_part_iii/">(part III)</a>.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_gathering_our_input_data">Gathering our input data</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_gathering_our_input_data">Gathering our input data</h3>
 <div class="paragraph">
 <p>Our inputs will be swaption premiums quoted in the market by various
 broker firms. Those quotes are available for quite granular
@@ -226,10 +224,8 @@ strike = payer, low strike = receiver) around ATM.</p>
 <div class="title">Figure 2. OTM IRR Premiums</div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_aggregating_all_information_into_one_dataframe">Aggregating all information into one DataFrame</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_aggregating_all_information_into_one_dataframe">Aggregating all information into one DataFrame</h3>
 <div class="paragraph">
 <p>Now we have all the relevant data, but unfortunately in a number of
 locations, which makes something like a "Master" DataFrame really
@@ -270,10 +266,8 @@ model. That calibration will actually take place in the next
 article.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_downloads">Downloads</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_downloads">Downloads</h3>
 <div class="paragraph">
 <p><a href="https://www.icloud.com/iclouddrive/0V7R2YhvMf3NbjIUNXKtA2gvw#Market_Data_Prep">
 Jupyter Notebook</a></p>
@@ -281,7 +275,6 @@ Jupyter Notebook</a></p>
 <div class="paragraph">
 <p><a href="https://www.icloud.com/iclouddrive/09fWSLA8cbQHRC7LmLoPM6CaQ#swaption_market_data">
 Excel Sheet</a></p>
-</div>
 </div>
 </div>
 
@@ -398,14 +391,17 @@ s.setAttribute('data-timestamp', +new Date());
     <script src="https://fin-eng.github.io/blog//js/clean-blog.js"></script>
 
     
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-123-45', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
 
 

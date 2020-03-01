@@ -4,14 +4,9 @@ tags = ["Python", "Plotly", "Cufflinks", "Dash", "Data Visualization", "Quant Tr
 title= "An introduction to the Plotly Dash Library"
 description = "Plotly is celebrated for its beautiful interactive graphs, figures and tables. Cufflinks brings in the finance tools.  Dash let you combine all those to powerful web apps."
 +++
-= An introduction to the Plotly Dash Library
-:source-highlighter: coderay
+=== Overview 
 :source-language: python
 :imagesdir: /Users/Olli/Blog_Artikel/
-Oliver Kahl <oliverkahl@gmx.de>
-2017-12-14
-
-== Overview
 During my
 link:http://www.my-rates-notebook.de/series/continuous-futures/[Continuous
 Futures] project I was already impressed by the capabilities of
@@ -26,7 +21,7 @@ obviously missing a powerful tool to achieve that.  The solution,
 `Dash`, was such a good fit that I decided to write this article as a
 little introduction to it.
 
-== What makes Dash so powerful in financial applications?
+=== What makes Dash so powerful in financial applications?
 Basically you can create web apps that completely run in the browser
 without any knowledge of HTML or JavaScript. The range of capabilities
 is quite impressive as it goes from simply hosting a Plotly graph up
@@ -70,7 +65,7 @@ app, let's take a look at it:
 link:https://futures-roll-carry-app.herokuapp.com/[Futures Roll &
 Carry Analytics]
 
-== The basic structure of a Dash app
+=== The basic structure of a Dash app
 Typically the first thing you would take care of in deploying a Dash
 app is getting a broad idea of how the layout would look like. For me
 the most convenient way to deal with that is using an `external style
@@ -92,7 +87,7 @@ dashboard. The object itself is identical to what you already have
 done with Plotly. Now we look at the outlined building blocks of the
 app in more detail.
 
-=== Library imports
+==== Library imports
 *Libraries to run Dash:*
 [source, python]
 import dash
@@ -111,7 +106,7 @@ import pickle
 from datetime import datetime as dt
 from pandas.tseries.offsets import DateOffset
 
-=== Styling the app
+==== Styling the app
 *Embedding the external style sheet:*
 [source, python]
 app.css.append_css({'external_url': 'https://cdn.rawgit.com/plotly/dash-app-stylesheets/2d266c578d2a6e8850ebce48fdb52759b2aef506/stylesheet-oil-and-gas.css'})
@@ -193,7 +188,7 @@ html.Div([
 All other objects are inserted into the style sheet in a similar
 fashion.
 
-=== Adding interactivity with callbacks
+==== Adding interactivity with callbacks
 Now we add a layer to our code that connects user inputs with applying
 the needed updates on our output objects. This is done with a `callback
 decorator` that automatically calls a function whenever the state of a
@@ -228,7 +223,7 @@ def update_graph(value, start_date, end_date):
 
 Now we have already everything together to make our app work.
 
-== Advanced Dash features
+=== Advanced Dash features
 Although the above steps are fully sufficient to get our app going, we
 will make use of some more advanced techniques to make it
 computationally more efficient. For that purpose we will focus on
@@ -237,7 +232,7 @@ computations via a dependency called `State`. Another efficiency gain
 is sharing time-consuming calculations between callbacks with a
 `Hidden Div`.
 
-=== Buttons 
+==== Buttons 
 Regular Dash inputs recognise a (user) change of the input object
 immediately and then kick-off the associated callback(s). In many
 cases the user specifies multiple inputs and a computation is only
@@ -276,7 +271,7 @@ button and the items that have been inputs before, are now type
 `State`. That is just holding back the execution of the function
 belonging to the callback until the button was hit.
 
-=== Sharing Data between Callbacks
+===== Sharing Data between Callbacks
 At a first glance it might look appealing to use global variables for
 shared data. As Dash is used in multi-user environments and is also
 able to run with multiple Python workers, global variables can be
@@ -319,7 +314,7 @@ def update_graph(json_file):
     return figure
 ...
 
-== Deploying Dash Apps
+=== Deploying Dash Apps
 By default your Dash app runs on `Localhost`. This means it is only
 available on your own machine. Typically you will use this mode in
 development and for testing. As soon as you want to make your app

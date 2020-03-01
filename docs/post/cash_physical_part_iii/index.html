@@ -104,8 +104,8 @@ Tags: <a href="https://fin-eng.github.io/blog/tags/swaptions">swaptions</a>, <a 
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  <div id="preamble">
-<div class="sectionbody">
+                  <div class="sect2">
+<h3 id="_overview">Overview</h3>
 <div class="paragraph">
 <p>In the previous article we calibrated cash IRR payer, cash IRR
 receiver and physical vols in the physical measure. These sets of vols
@@ -126,10 +126,8 @@ we explicitly allow for negative rates by utilizing a "shifted"
 version of the original model.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_approaching_calibration">Approaching calibration</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_approaching_calibration">Approaching calibration</h3>
 <div class="paragraph">
 <p>As pointed out above, we have flagged vols with three category types:
 "cash receiver", "cash payer" and "physical". These categories go into
@@ -155,17 +153,15 @@ DataFrame with the parameter columns. Furthermore, we build
 calibration groups according to the number of available quotes over
 the range of strikes. See below:</p>
 </div>
-<div id="img-sabr_in" class="imageblock" style="text-align: left">
+<div id="img-sabr_in" class="imageblock text-left">
 <div class="content">
 <img src="https://fin-eng.github.io/blog/vols_sabr_in.PNG" alt="SABR vols in" width="100%" height="100%">
 </div>
 <div class="title">Figure 1. Vols going into SABR calibration.</div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_sabr_parameter_calibration">SABR parameter calibration</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_sabr_parameter_calibration">SABR parameter calibration</h3>
 <div class="paragraph">
 <p>As outlined above we now give our "groups" into calibration. The
 calibration itself will be done by the SABR class. We drip feed it group
@@ -174,7 +170,7 @@ available. The algorithm is outlined below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">calib_results = np.empty((0,4))
+<pre class="highlight"><code class="language-python" data-lang="python">calib_results = np.empty((0,4))
 for calib_groups in [calib_groups_rec, calib_groups_pay, calib_groups_phy]:
     for name, group in calib_groups:
         if name == 0: #where full set of strike data is availiable
@@ -248,16 +244,14 @@ vols_sabr_in.iloc[:,14:] = calib_results</code></pre>
 <p>After running through the calibration we now have all the SABR parameters in our "vols_sabr_in" DataFrame.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_sabr_vol_calculation">SABR vol calculation</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_sabr_vol_calculation">SABR vol calculation</h3>
 <div class="paragraph">
 <p>Before calling the "SABR_out" method from our SABR class, we do one final parameter calibration and then feed these parameters into "SABR_out" as outlined below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">vols_sabr_out = pd.DataFrame(columns = strikes, index = vols_sabr_in.index)
+<pre class="highlight"><code class="language-python" data-lang="python">vols_sabr_out = pd.DataFrame(columns = strikes, index = vols_sabr_in.index)
 calib_results = np.empty((0,4))
 for line in vols_sabr_in.itertuples():
     sabr_par = SABR(line[1], line[2], line.Index[1] / 12,
@@ -271,10 +265,8 @@ vols_sabr_in.iloc[:,14:] = calib_results</code></pre>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_inspection_of_the_calibration_results">Inspection of the calibration results</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_inspection_of_the_calibration_results">Inspection of the calibration results</h3>
 <div class="paragraph">
 <p>As a first step, it makes sense to pick those expiry/ tail
 combinations where we have a full range of market quotes. In the
@@ -282,19 +274,19 @@ following we choose four expiry/ tail combinations&#8201;&#8212;&#8201;in the ho
 capture the majority of the vol structure&#8201;&#8212;&#8201;for our three vol types.
 We inspect the fit visually by Matplotlib charts:</p>
 </div>
-<div id="img-SABR_phy" class="imageblock" style="text-align: left">
+<div id="img-SABR_phy" class="imageblock text-left">
 <div class="content">
 <img src="https://fin-eng.github.io/blog/phy_sabr_smile.png" alt="SABR phy smile" width="800" height="600">
 </div>
 <div class="title">Figure 2. Fit SABR vs market for physical (cash CCP) settlement.</div>
 </div>
-<div id="img-SABR_cash_rec" class="imageblock" style="text-align: left">
+<div id="img-SABR_cash_rec" class="imageblock text-left">
 <div class="content">
 <img src="https://fin-eng.github.io/blog/cash_rec_sabr_smile.png" alt="SABR cash rec smile" width="800" height="600">
 </div>
 <div class="title">Figure 3. Fit SABR vs market for cash IRR receiver.</div>
 </div>
-<div id="img-SABR_cash_pay" class="imageblock" style="text-align: left">
+<div id="img-SABR_cash_pay" class="imageblock text-left">
 <div class="content">
 <img src="https://fin-eng.github.io/blog/cash_pay_sabr_smile.png" alt="SABR cash pay smile" width="800" height="600">
 </div>
@@ -311,7 +303,7 @@ better fits.</p>
 <div class="paragraph">
 <p>As a last piece, we present a 30y30y smile comparioson between cash IRR receiver, cash IRR payer and physical (CCP) vols similar to the one we already showed in the previous article because here cash/ physical basis should be the most pronounced.</p>
 </div>
-<div id="img-SABR_30y_30y_smile" class="imageblock" style="text-align: left">
+<div id="img-SABR_30y_30y_smile" class="imageblock text-left">
 <div class="content">
 <img src="https://fin-eng.github.io/blog/30y30y_swaption_smile.png" alt="SABR 30y30y smile" width="800" height="600">
 </div>
@@ -329,25 +321,20 @@ put you in a position to consistently price all standard vanilla
 options.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_references">References</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_references">References</h3>
 <div class="paragraph">
 <p>Hagan et al.: "Managing smile risk"</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_downloads">Downloads</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_downloads">Downloads</h3>
 <div class="paragraph">
 <p><a href="https://www.icloud.com/iclouddrive/0mo8yHmP21wRfw1yJfQfg_twA#SABR_Cal">Jupyter Notebook</a></p>
 </div>
 <div class="paragraph">
 <p><a href="https://www.icloud.com/iclouddrive/0ya3fWGldLBsrNCdM_L5Gtw6A#sabr">SABR
 Model</a></p>
-</div>
 </div>
 </div>
 
@@ -464,14 +451,17 @@ s.setAttribute('data-timestamp', +new Date());
     <script src="https://fin-eng.github.io/blog//js/clean-blog.js"></script>
 
     
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-123-45', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
 
 

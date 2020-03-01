@@ -104,9 +104,8 @@ Tags: <a href="https://fin-eng.github.io/blog/tags/quant-trading">quant trading<
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  <div class="sect1">
-<h2 id="_overview">Overview</h2>
-<div class="sectionbody">
+                  <div class="sect2">
+<h3 id="_overview">Overview</h3>
 <div class="paragraph">
 <p>Futures are an excellent way of gaining access and exposure to
 various asset classes. The contracts are often much more liquid than
@@ -144,12 +143,10 @@ all the code involved to make everything outlined here easy to
 replicate by yourself.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_some_basics_about_futures_trading">Some basics about Futures trading</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_futures_terminology">Futures terminology</h3>
+<h3 id="_some_basics_about_futures_trading">Some basics about Futures trading</h3>
+<div class="sect3">
+<h4 id="_futures_terminology">Futures terminology</h4>
 <div class="paragraph">
 <p>Before we will carry out a certain methodology, we will visit some
 common procedures to generate a continuous time-series. For all this,
@@ -167,8 +164,8 @@ possible price movement and tick value is the loss or gain incurred
 by that movement.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_basis_between_subsequent_futures_contracts">Basis between subsequent Futures contracts</h3>
+<div class="sect3">
+<h4 id="_basis_between_subsequent_futures_contracts">Basis between subsequent Futures contracts</h4>
 <div class="paragraph">
 <p>So first of all, we have to ask, why there is a difference in the
 price in subsequent Futures contracts at all? To gain an
@@ -183,12 +180,10 @@ factors can be repo rates, dividends, storage costs, etc.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_building_a_continuous_futures_contract">Building a Continuous Futures contract</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_available_methods_at_a_glance">Available methods at a glance</h3>
+<h3 id="_building_a_continuous_futures_contract">Building a Continuous Futures contract</h3>
+<div class="sect3">
+<h4 id="_available_methods_at_a_glance">Available methods at a glance</h4>
 <div class="paragraph">
 <p>Before we start implementing algorithms to come up with a Continuous
 Futures time-series, we will shortly discuss the most prominent
@@ -296,10 +291,8 @@ prices.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_determine_the_method_of_choice_for_a_continuous_futures_with_our_data_set">Determine the method of choice for a Continuous Futures with our data set</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_determine_the_method_of_choice_for_a_continuous_futures_with_our_data_set">Determine the method of choice for a Continuous Futures with our data set</h3>
 <div class="paragraph">
 <p>From the above discussion the Panama Adjustment as well as the
 Perpetual Method sound promising. We will test the two and benchmark
@@ -309,8 +302,8 @@ Reuters Eikon Futures contracts being fetched by the Python API. We
 will then process the observed data in Python, analyze the outcomes,
 and pick our method of choice.</p>
 </div>
-<div class="sect2">
-<h3 id="_spliced_contracts">Spliced contracts</h3>
+<div class="sect3">
+<h4 id="_spliced_contracts">Spliced contracts</h4>
 <div class="paragraph">
 <p>As mentioned above, we we pick German Government Bond Futures
 (Schatz, Bobl, Bund) for our analysis. We collect daily OHLCV
@@ -323,16 +316,16 @@ will do this for us:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">import numpy as np <b class="conum">(1)</b>
+<pre class="highlight"><code class="language-python" data-lang="python">import numpy as np # <b class="conum">(1)</b>
 import pandas as pd
 import eikon as ek
 import configparser
 
-config = configparser.ConfigParser() <b class="conum">(2)</b>
+config = configparser.ConfigParser() # <b class="conum">(2)</b>
 config.read('logins.cfg')
 ek.set_app_id(config['eikon']['app_id'])
 
-def get_fut_front_back(start_date, end_date, front_perpr = ['FGBLc1', 'FGBMc1', 'FGBSc1'], <b class="conum">(3)</b>
+def get_fut_front_back(start_date, end_date, front_perpr = ['FGBLc1', 'FGBMc1', 'FGBSc1'], # <b class="conum">(3)</b>
                 back_perpr = ['FGBLc2', 'FGBMc2', 'FGBSc2'],
                 fields = ['OPEN', 'LOW', 'HIGH', 'CLOSE', 'VOLUME']):
     '''
@@ -355,7 +348,7 @@ def get_fut_front_back(start_date, end_date, front_perpr = ['FGBLc1', 'FGBMc1', 
                                                     )
     return data_dict
 
-data_dict = get_fut_front_back('2017-1-1', '2017-11-17') <b class="conum">(4)</b></code></pre>
+data_dict = get_fut_front_back('2017-1-1', '2017-11-17') # <b class="conum">(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -387,8 +380,8 @@ sudden drop in the time-series.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_perpetual_method">Perpetual Method</h3>
+<div class="sect3">
+<h4 id="_perpetual_method">Perpetual Method</h4>
 <div class="paragraph">
 <p>To implement the Perpetual Method as outlined above, we define a
 function "get_perp_fut". The function basically takes the already
@@ -399,7 +392,7 @@ function:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">def get_perp_fut(market_data, expiry_dates, rollover_days=5, <b class="conum">(1)</b>
+<pre class="highlight"><code class="language-python" data-lang="python">def get_perp_fut(market_data, expiry_dates, rollover_days=5, # <b class="conum">(1)</b>
                  data_cols=['OPEN', 'LOW', 'HIGH', 'CLOSE', 'VOLUME']):
     '''
     Converts a df of pairs of Futures contracts ('Front' &amp; 'Back' ) into a continuous
@@ -441,7 +434,7 @@ function:</p>
 
     return perp_fut
 
-for key in data_dict.copy().keys(): <b class="conum">(2)</b>
+for key in data_dict.copy().keys(): # <b class="conum">(2)</b>
     data_dict['%s_perp_10' % key] = get_perp_fut(
         data_dict[key], 'Gov_Futures_Exp.xlsx', rollover_days=10)
     data_dict['%s_perp_40' % key] = get_perp_fut(
@@ -487,8 +480,8 @@ hugely complex trading in case we want to do this consistently to our
 rollover.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_panama_method">Panama Method</h3>
+<div class="sect3">
+<h4 id="_panama_method">Panama Method</h4>
 <div class="paragraph">
 <p>Here we proceed basically the same like above: From our simple spliced
 contracts we form a smooth time series by defining a Python function
@@ -506,7 +499,7 @@ a bit from the Perpetual Method here).</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">def get_pan_fut(market_data, expiry_dates, <b class="conum">(1)</b>
+<pre class="highlight"><code class="language-python" data-lang="python">def get_pan_fut(market_data, expiry_dates, # <b class="conum">(1)</b>
                 data_cols=['OPEN', 'LOW', 'HIGH', 'CLOSE', 'VOLUME']):
     '''
     Converts a df of pairs of Futures contracts ('Front' &amp; 'Back' )
@@ -520,7 +513,7 @@ a bit from the Perpetual Method here).</p>
     market_data.columns.set_levels(['Front', 'Back'], 0, inplace = True)
     expiry_dates = pd.read_excel(expiry_dates, header=None, index_col=0, squeeze=1)
     expiry_dates = pd.to_datetime(expiry_dates.values, dayfirst = True)
-    pan_fut = pd.DataFrame(np.zeros((len(market_data.index), len(data_cols))), <b class="conum">(1)</b>
+    pan_fut = pd.DataFrame(np.zeros((len(market_data.index), len(data_cols))), # <b class="conum">(1)</b>
                         index = market_data.index, columns=data_cols)
     roll_adjustment_total = np.zeros([len(data_cols), 1])
     pan_fut.iloc[pan_fut.index.get_loc(expiry_dates[-1]) + 1:] = market_data['Front'].iloc[
@@ -554,7 +547,7 @@ a bit from the Perpetual Method here).</p>
                 roll_target]
     return pan_fut
 
-for key in data_dict.copy().keys(): <b class="conum">(2)</b>
+for key in data_dict.copy().keys(): # <b class="conum">(2)</b>
     data_dict['%s_pan' % key] = get_pan_fut(data_dict[key], 'Gov_Futures_Exp.xlsx')</code></pre>
 </div>
 </div>
@@ -596,10 +589,8 @@ buyer.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_our_method_of_choice">Our method of choice</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_our_method_of_choice">Our method of choice</h3>
 <div class="paragraph">
 <p>With the rather large gaps between contracts in our time series, we
 choose the Panama Method over the Perpetual Method. This is
@@ -627,18 +618,14 @@ vectorised approach to an event-driven approach with more granular
 data on intra-day basis.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_downloads">Downloads</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_downloads">Downloads</h3>
 <div class="paragraph">
 <p><a href="https://www.icloud.com/iclouddrive/0Rgvba4u92ecCsQgZ1cwlF-FQ#Continuous_Futures">Jupyter Notebook</a></p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_references">References</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_references">References</h3>
 <div class="paragraph">
 <p><a href="https://www.quantstart.com/articles/Continuous-Futures-Contracts-for-Backtesting-Purposes">Continuous
 Futures for Backtesting Purposes</a></p>
@@ -658,7 +645,6 @@ for (i=0;i<tables.length;i++) {
   tables[i].className = 'table table-condensed';
 }
 </script>
-</div>
 </div>
 
                   
@@ -768,14 +754,17 @@ s.setAttribute('data-timestamp', +new Date());
     <script src="https://fin-eng.github.io/blog//js/clean-blog.js"></script>
 
     
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-123-45', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
 
 

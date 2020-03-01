@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>My Rates Notebook.</title>
@@ -19,6 +19,15 @@
       
       <guid>https://fin-eng.github.io/blog/about/</guid>
       <description>My name is Oliver Kahl. Before I introduce myself properly, allow me to guess, that you are as enthusiastic and interested in finance and markets as the many people in the industry I am daily talking to: be it in person, phone, chat, blog or whatever means of communication. Given that you are also thrilled and excited what rapid change finance has and will experience in the light of brilliant technologies at our fingertips&amp;#8201;&amp;#8212;&amp;#8201;probably we have a perfect match.</description>
+    </item>
+    
+    <item>
+      <title>Switching to €STR: &#34;Big Bang&#34; troubles for Swaptions</title>
+      <link>https://fin-eng.github.io/blog/post/estr_discounting_swaptions/</link>
+      <pubDate>Sat, 29 Feb 2020 12:54:17 +0200</pubDate>
+      
+      <guid>https://fin-eng.github.io/blog/post/estr_discounting_swaptions/</guid>
+      <description>Overview On 2nd of October 2019, the ECB first published €STR, an overnight interest rate which effectively replaces EONIA within the EU benchmark reform framework. For the transition period, until 3rd January 2022, EONIA is still published as a 8.5 basis points spread above €STR. The ECB working group on euro risk-free rates made the recommendation to switch interest paid on collateral from EONIA to €STR. While different approaches for the transition were considered, the preferred one was a so called &#34;</description>
     </item>
     
     <item>
@@ -45,7 +54,7 @@
       <pubDate>Sat, 26 May 2018 12:53:17 +0200</pubDate>
       
       <guid>https://fin-eng.github.io/blog/post/cash_physical_part_i/</guid>
-      <description>With the change in the market standard cash settlement convention from an Internal Rate of Return (IRR) approach to Cash Collateralized Price (CCP), effective in September or October 2018, remains a bit of a challenge to put legacy trades, forthcoming new-style transactions, and physically settled contracts into a consisting pricing framework.
+      <description>Overview With the change in the market standard cash settlement convention from an Internal Rate of Return (IRR) approach to Cash Collateralized Price (CCP), effective in September or October 2018, remains a bit of a challenge to put legacy trades, forthcoming new-style transactions, and physically settled contracts into a consisting pricing framework.
  In this small series we will present a Python implementation in which all mentioned trades are valued in an arbitrage free fashion.</description>
     </item>
     
@@ -55,7 +64,7 @@
       <pubDate>Sat, 26 May 2018 12:51:17 +0200</pubDate>
       
       <guid>https://fin-eng.github.io/blog/post/cash_physical_part_ii/</guid>
-      <description>In the previous article, we gathered all the data needed. We will now utilize that information to calibrate our model. As it takes some functions and dependencies, our approach will be to put all the calibration code into three classes. In that regard we will have an &#34;ImpliedVol&#34; class, which does the vol implication from premiums. Also we have a superclass &#34;CashPhyATM&#34;, doing the basic calibration for ATM data. There is a subclass to &#34;</description>
+      <description>Overview In the previous article, we gathered all the data needed. We will now utilize that information to calibrate our model. As it takes some functions and dependencies, our approach will be to put all the calibration code into three classes. In that regard we will have an &#34;ImpliedVol&#34; class, which does the vol implication from premiums. Also we have a superclass &#34;CashPhyATM&#34;, doing the basic calibration for ATM data. There is a subclass to &#34;</description>
     </item>
     
     <item>
@@ -73,7 +82,7 @@
       <pubDate>Sat, 26 May 2018 12:43:17 +0200</pubDate>
       
       <guid>https://fin-eng.github.io/blog/post/cash_physical_part_iii/</guid>
-      <description>In the previous article we calibrated cash IRR payer, cash IRR receiver and physical vols in the physical measure. These sets of vols allowed us to value all settlement types in an arbitrage-free fashion. Nevertheless, what we were still lacking, was a complete vol cube for every single settlement type. As it is well known that &#34;regular&#34; interpolation techniques fail with respect that they are not proven to be free of arbitrage, we select the SABR model as a popular choice for completing the vol cube.</description>
+      <description>Overview In the previous article we calibrated cash IRR payer, cash IRR receiver and physical vols in the physical measure. These sets of vols allowed us to value all settlement types in an arbitrage-free fashion. Nevertheless, what we were still lacking, was a complete vol cube for every single settlement type. As it is well known that &#34;regular&#34; interpolation techniques fail with respect that they are not proven to be free of arbitrage, we select the SABR model as a popular choice for completing the vol cube.</description>
     </item>
     
     <item>

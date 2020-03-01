@@ -5,14 +5,10 @@ title= "Collateralized Cash Price --- An introduction to the new settlement stan
 description = "Collateralized Cash Price will be effective on 26th November 2018. We discuss what has to be done to be well prepared."
 series = ["Cash vs. Physical Swaptions"]
 +++
-= Collateralized Cash Price - An introduction to the new settlement standard in Swaptions
+=== Overview
 :source-highlighter: coderay
 :source-language: python
 :imagesdir: /Users/Olli/Blog_Artikel/
-Oliver Kahl <oliverkahl@gmx.de>
-2017-12-14
-
-== Overview
 
 For years the `Euro Swaption Market` was split into two major types of
 settlement methods: one being `Physical` and the other one being a cash
@@ -25,7 +21,7 @@ problem is with the IRR and why the CCP perfectly suits into a world
 of mandatory collaterlization and clearing and therefore mimics a
 physical settlement quite closely.
 
-== Why was the original date for going-live in July delayed?
+=== Why was the original date for going-live in July delayed?
 
 Basically there had been issues in the documentation with regards to
 the discount factors needed for the cash settlement amount. In the
@@ -38,7 +34,7 @@ to interest rates applied to variation margin by clearing houses via a so-called
 twist may turn out to be more suitable for whatever comes out of the
 decisions to be made around risk-free rates.
 
-== What is the difference between physical and cash IRR settlement and why is the latter causing trouble?
+=== What is the difference between physical and cash IRR settlement and why is the latter causing trouble?
 
 Let's firstly turn our attention to the physical settlement of
 swaptions because probably the most natural way of thinking about
@@ -69,7 +65,7 @@ referring to. Although correlation between the two is high, strictly
 speaking our IRR swap compared to the (physical) swap has to be
 modeled separately to capture its unique dynamics.
 
-== But why has one come up with such a "distorting" convention in the first place?
+=== But why has one come up with such a "distorting" convention in the first place?
 
 For this we fast forward things to the expiry of the IRR swaption and
 see that things get pretty easy with the IRR methodology: all
@@ -81,7 +77,7 @@ of the IRR swaption, tend to be limited. So probably the IRR method was
 initially agreed to make a settlement easy, while ignoring or
 tolerating a "small" valuation issue.
 
-== Why is the market now deciding to move to CCP?
+=== Why is the market now deciding to move to CCP?
 
 There are quite a bunch of arguments around suggesting that
 move: Firstly, since 2008 the market focuses much more on "correctly"
@@ -101,7 +97,7 @@ further support this argument. In that context switching standards is
 probably kind of "overdue" and finally was decided by ISDA and global
 dealers.
 
-== How does the CCP compare to physical settlement?
+=== How does the CCP compare to physical settlement?
 
 CCP mimics how valuation for the majority of physical swaps is done.
 Therefore the settlement amount due -- according to CCP -- is simply the
@@ -118,13 +114,13 @@ moment where an XVA desk comes into play. But even in this more
 complex situation, it is an advantage to have the risk-free benchmark
 calculated accurately and then adjust for all the "va's" afterwards.
 
-== What will happen to the old IRR Swaptions? Will there still be a market for them?
+=== What will happen to the old IRR Swaptions? Will there still be a market for them?
 
 So far global dealers seem committed to further support the market for
 IRR style swaptions. It has to be seen how strong this commitment is
 and whether the market will dry up over a medium- or long term.
 
-== What has to be done to be ready for the switch?
+=== What has to be done to be ready for the switch?
 
 That largely depends on where your swaption business is standing. We
 will therefore make case separations for three types of swaption
@@ -179,7 +175,7 @@ an effect can be seen. But probably the way to go in that scenario is
 to just take that one-off effect. Still, timing of the effect might be
 steerable, if one holds on feeding IRR volatility from legacy sources.
 
-== How does a consistent valuation in a book with Physical, IRR and CCP Swaptions look like?
+=== How does a consistent valuation in a book with Physical, IRR and CCP Swaptions look like?
 
 That will be the main focus of the next articles in this series.
 Basically, we will do this in three steps:

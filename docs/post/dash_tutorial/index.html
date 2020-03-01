@@ -103,9 +103,8 @@ Tags: <a href="https://fin-eng.github.io/blog/tags/python">python</a>, <a href="
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  <div class="sect1">
-<h2 id="_overview">Overview</h2>
-<div class="sectionbody">
+                  <div class="sect2">
+<h3 id="_overview">Overview</h3>
 <div class="paragraph">
 <p>During my
 <a href="http://www.my-rates-notebook.de/series/continuous-futures/">Continuous
@@ -122,10 +121,8 @@ obviously missing a powerful tool to achieve that.  The solution,
 little introduction to it.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_what_makes_dash_so_powerful_in_financial_applications">What makes Dash so powerful in financial applications?</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_makes_dash_so_powerful_in_financial_applications">What makes Dash so powerful in financial applications?</h3>
 <div class="paragraph">
 <p>Basically you can create web apps that completely run in the browser
 without any knowledge of HTML or JavaScript. The range of capabilities
@@ -205,10 +202,8 @@ app, let&#8217;s take a look at it:</p>
 Carry Analytics</a></p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_the_basic_structure_of_a_dash_app">The basic structure of a Dash app</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_the_basic_structure_of_a_dash_app">The basic structure of a Dash app</h3>
 <div class="paragraph">
 <p>Typically the first thing you would take care of in deploying a Dash
 app is getting a broad idea of how the layout would look like. For me
@@ -231,14 +226,14 @@ dashboard. The object itself is identical to what you already have
 done with Plotly. Now we look at the outlined building blocks of the
 app in more detail.</p>
 </div>
-<div class="sect2">
-<h3 id="_library_imports">Library imports</h3>
+<div class="sect3">
+<h4 id="_library_imports">Library imports</h4>
 <div class="paragraph">
 <p><strong>Libraries to run Dash:</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">import dash
+<pre class="highlight"><code class="language-python" data-lang="python">import dash
 from dash.dependencies import Input, Output, State, Event
 import dash_core_components as dcc
 import dash_html_components as html</code></pre>
@@ -249,7 +244,7 @@ import dash_html_components as html</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">import plotly
+<pre class="highlight"><code class="language-python" data-lang="python">import plotly
 import cufflinks as cf
 import flask
 import numpy as np
@@ -260,14 +255,14 @@ from pandas.tseries.offsets import DateOffset</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_styling_the_app">Styling the app</h3>
+<div class="sect3">
+<h4 id="_styling_the_app">Styling the app</h4>
 <div class="paragraph">
 <p><strong>Embedding the external style sheet:</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">app.css.append_css({'external_url': 'https://cdn.rawgit.com/plotly/dash-app-stylesheets/2d266c578d2a6e8850ebce48fdb52759b2aef506/stylesheet-oil-and-gas.css'})</code></pre>
+<pre class="highlight"><code class="language-python" data-lang="python">app.css.append_css({'external_url': 'https://cdn.rawgit.com/plotly/dash-app-stylesheets/2d266c578d2a6e8850ebce48fdb52759b2aef506/stylesheet-oil-and-gas.css'})</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -277,7 +272,7 @@ appended, columns have to add up to 12 (e.g. 3 + 9, 5 + 5 + 2, &#8230;&#8203;).
 On each intersection of row y and column x you typically find an
 object like a graph. The illustrations below will shed some light on how CSS styling was utilized in our app.</p>
 </div>
-<div id="img-dash_styling" class="imageblock" style="text-align: left">
+<div id="img-dash_styling" class="imageblock text-left">
 <div class="content">
 <img src="https://fin-eng.github.io/blog/dash_styling.png" alt="CSS Styling for Dash" width="90%" height="100%">
 </div>
@@ -289,7 +284,7 @@ here):</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">app.layout = html.Div([
+<pre class="highlight"><code class="language-python" data-lang="python">app.layout = html.Div([
     # Title + Description
     html.Div(
         [
@@ -323,7 +318,7 @@ in this case.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">...
+<pre class="highlight"><code class="language-python" data-lang="python">...
 html.Div(
                 [
                     html.P('Choose Contract:'),
@@ -352,7 +347,7 @@ below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">...
+<pre class="highlight"><code class="language-python" data-lang="python">...
 html.Div([
                     dcc.Graph(
                     id='Futures Graph',
@@ -366,8 +361,8 @@ html.Div([
 fashion.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_adding_interactivity_with_callbacks">Adding interactivity with callbacks</h3>
+<div class="sect3">
+<h4 id="_adding_interactivity_with_callbacks">Adding interactivity with callbacks</h4>
 <div class="paragraph">
 <p>Now we add a layer to our code that connects user inputs with applying
 the needed updates on our output objects. This is done with a <code>callback
@@ -379,7 +374,7 @@ future along with a selected start and end date.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">@app.callback(
+<pre class="highlight"><code class="language-python" data-lang="python">@app.callback(
     Output('Futures Graph', 'figure'),
     [Input('radioitem_future', 'value'),
      Input('date_range_future', 'start_date'),
@@ -408,10 +403,8 @@ def update_graph(value, start_date, end_date):
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_advanced_dash_features">Advanced Dash features</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_advanced_dash_features">Advanced Dash features</h3>
 <div class="paragraph">
 <p>Although the above steps are fully sufficient to get our app going, we
 will make use of some more advanced techniques to make it
@@ -421,8 +414,8 @@ computations via a dependency called <code>State</code>. Another efficiency gain
 is sharing time-consuming calculations between callbacks with a
 <code>Hidden Div</code>.</p>
 </div>
-<div class="sect2">
-<h3 id="_buttons">Buttons</h3>
+<div class="sect3">
+<h4 id="_buttons">Buttons</h4>
 <div class="paragraph">
 <p>Regular Dash inputs recognise a (user) change of the input object
 immediately and then kick-off the associated callback(s). In many
@@ -436,7 +429,7 @@ inputs area of the dashboard:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">...
+<pre class="highlight"><code class="language-python" data-lang="python">...
 html.Button('Submit', id='button', style={'margin-top': '30'}),
 ],
     className = 'two columns',
@@ -451,7 +444,7 @@ it a bit:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">...
+<pre class="highlight"><code class="language-python" data-lang="python">...
 @app.callback(
     Output('Futures Graph', 'figure'),
     [Input('button', 'n_clicks')],
@@ -468,9 +461,8 @@ button and the items that have been inputs before, are now type
 <code>State</code>. That is just holding back the execution of the function
 belonging to the callback until the button was hit.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_sharing_data_between_callbacks">Sharing Data between Callbacks</h3>
+<div class="sect4">
+<h5 id="_sharing_data_between_callbacks">Sharing Data between Callbacks</h5>
 <div class="paragraph">
 <p>At a first glance it might look appealing to use global variables for
 shared data. As Dash is used in multi-user environments and is also
@@ -483,7 +475,7 @@ specified in the layout section:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">...
+<pre class="highlight"><code class="language-python" data-lang="python">...
 html.Div(id='pre-processing', style={'display': 'none'}),
 ...</code></pre>
 </div>
@@ -493,7 +485,7 @@ html.Div(id='pre-processing', style={'display': 'none'}),
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">...
+<pre class="highlight"><code class="language-python" data-lang="python">...
 @app.callback(
 Output('pre-processing', 'children'),
 [Input('button', 'n_clicks')],
@@ -511,7 +503,7 @@ def preparation(n_clicks, future, end_date):
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">...
+<pre class="highlight"><code class="language-python" data-lang="python">...
 @app.callback(
     Output('Spliced Technical Graph', 'figure'),
     [Input('pre-processing', 'children')])
@@ -525,9 +517,8 @@ def update_graph(json_file):
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_deploying_dash_apps">Deploying Dash Apps</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_deploying_dash_apps">Deploying Dash Apps</h3>
 <div class="paragraph">
 <p>By default your Dash app runs on <code>Localhost</code>. This means it is only
 available on your own machine. Typically you will use this mode in
@@ -542,7 +533,6 @@ nice <a href="https://dash.plot.ly/deployment/">tutorial</a> on how to
 <p>I hope you have enjoyed reading this little tutorial and you are more
 than welcome to get in touch via the comment section or a personal
 message.</p>
-</div>
 </div>
 </div>
 
@@ -635,14 +625,17 @@ s.setAttribute('data-timestamp', +new Date());
     <script src="https://fin-eng.github.io/blog//js/clean-blog.js"></script>
 
     
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-123-45', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
 
 

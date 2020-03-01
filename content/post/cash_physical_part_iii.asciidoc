@@ -5,12 +5,10 @@ title= "Collateralized Cash Price --- A consistent pricing framework (part III)"
 description = "We apply a SABR model on the previously calibrated cash IRR, CCP and physical settled swaptions."
 series = ["Cash vs. Physical Swaptions"]
 +++
-= Collateralized Cash Price - A consistent pricing framework (Part III) 
-:source-highlighter: coderay
+=== Overview
+
 :source-language: python
 :imagesdir: /Users/Olli/Blog_Artikel/
-Oliver Kahl <oliverkahl@gmx.de>
-2017-12-14
 
 In the previous article we calibrated cash IRR payer, cash IRR
 receiver and physical vols in the physical measure. These sets of vols
@@ -29,7 +27,7 @@ premiums, we stick to the basic version of SABR: Hagan et al.
 we explicitly allow for negative rates by utilizing a "shifted"
 version of the original model.
 
-== Approaching calibration
+=== Approaching calibration
 
 As pointed out above, we have flagged vols with three category types:
 "cash receiver", "cash payer" and "physical". These categories go into
@@ -57,7 +55,7 @@ the range of strikes. See below:
 .Vols going into SABR calibration.
 image::/vols_sabr_in.PNG[SABR vols in, width = "100%", height= "100%", align = "left"]
 
-== SABR parameter calibration
+=== SABR parameter calibration
 
 As outlined above we now give our "groups" into calibration. The
 calibration itself will be done by the SABR class. We drip feed it group
@@ -138,7 +136,7 @@ vols_sabr_in.iloc[:,14:] = calib_results
 
 After running through the calibration we now have all the SABR parameters in our "vols_sabr_in" DataFrame.
 
-== SABR vol calculation
+=== SABR vol calculation
 
 Before calling the "SABR_out" method from our SABR class, we do one final parameter calibration and then feed these parameters into "SABR_out" as outlined below:
 
@@ -157,7 +155,7 @@ for line in vols_sabr_in.itertuples():
 vols_sabr_in.iloc[:,14:] = calib_results
 ----
 
-== Inspection of the calibration results
+=== Inspection of the calibration results
 
 As a first step, it makes sense to pick those expiry/ tail
 combinations where we have a full range of market quotes. In the
@@ -200,11 +198,11 @@ implementation similar to the one presented here in this series should
 put you in a position to consistently price all standard vanilla
 options.
 
-== References
+=== References
 
 Hagan et al.: "Managing smile risk"
 
-== Downloads
+=== Downloads
 
 link:https://www.icloud.com/iclouddrive/0mo8yHmP21wRfw1yJfQfg_twA#SABR_Cal[Jupyter Notebook]
 

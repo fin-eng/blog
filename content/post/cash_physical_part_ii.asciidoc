@@ -5,12 +5,11 @@ title= "Collateralized Cash Price --- A consistent pricing framework (part II)"
 description = "We discuss the calibration of a consistent model to price cash IRR, CCP and physical settled swaptions."
 series = ["Cash vs. Physical Swaptions"]
 +++
-= Collateralized Cash Price - A consistent pricing framework (Part II) 
+=== Overview
+
 :source-highlighter: highlightjs 
 :source-language: python
 :imagesdir: /Users/Olli/Blog_Artikel/
-Oliver Kahl <oliverkahl@gmx.de>
-2017-12-14
 
 In the previous article, we gathered all the data needed. We will now
 utilize that information to calibrate our model. As it takes some
@@ -23,7 +22,7 @@ calculating all the OTM values. The rest of our work will be done in a
 Jupyter Notebook. For our modelling we use Pietersz and Sengers
 "Cash-settled swaptions: A new pricing model".
 
-== Vol Implication
+=== Vol Implication
 
 The first step will be the implying of a shifted-log-normal volatility
 for all the premiums we collected this far. For this we will use the
@@ -115,9 +114,9 @@ is already complete, namely the ATM physical swaption surface:
 .ATM physical swaption surface.
 image::/ATM_physical_swaption_surface.png[ATM physical swaption surface, width = "100%", height= "100%", align = "left"]
 
-== Align cash IRR and physical (cash CCP) vols
+=== Align cash IRR and physical (cash CCP) vols
 
-=== Description of the approach
+==== Description of the approach
 
 Thus far we did nothing more than a regular (shifted) Black log-normal
 vol implication. The "CashPhyATM" superclass and it's "CashPhyOTM"
@@ -170,7 +169,7 @@ The "vols" DataFrame representation of the above now looks like this:
 .Cash/ physical ATM calibration input.
 image::/cash_phy_cal_input.PNG[Cash Phy ATM, hight = "100%", width = "100%"]
 
-=== ATM calibration
+==== ATM calibration
 
 The following shows, how we iterate over the "vols" DataFrame and call
 the respective methods from the "CashPhyATM" class, to obtain the
@@ -202,7 +201,7 @@ for line in vols.itertuples():
 
 Now we have added all calibrated ATM parameters to our DataFrame. 
 
-=== OTM calibration
+==== OTM calibration
 
 In the next step, we move away from the ATM point and calibrate all
 our grid points for OTM, where we observe market quotes. By using
@@ -271,7 +270,7 @@ Now we have milked our model dry in a sense that we have calibrated as
 many vols as we could get from market premiums in combination with
 what the model is able to do for us.
 
-== Visual inspection of the calibrated data
+=== Visual inspection of the calibrated data
 
 Now we essentially have three types of vols at the physical measure:
 cash IRR receiver, cash IRR payer and physical (cash CCP). That is
@@ -299,13 +298,13 @@ fail with respect to arbitrage concerns, a typical choice to arrive at
 a robust cube, is the SABR model. This is exactly what will be done in
 the next article.
 
-== References
+=== References
 
 Pietersz and Sengers: "Cash-settled swaptions: A new pricing model"
 
 Jaeckel: "By Implication"
 
-== Downloads
+=== Downloads
 
 link:https://www.icloud.com/iclouddrive/0dheBGT5FInwZriY9cDREilcQ#Cash_Phy_Cal[Jupyter Notebook]
 
