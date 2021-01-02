@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>swaps on My Rates Notebook.</title>
+    <link>https://fin-eng.github.io/blog/tags/swaps/</link>
+    <description>Recent content in swaps on My Rates Notebook.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Code released under the Apache 2.0 license.</copyright>
+    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://fin-eng.github.io/blog/tags/swaps/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rates, Volatility and the Virus: Visualisations of key market drivers in 2020</title>
+      <link>https://fin-eng.github.io/blog/post/time_lapse_2020/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://fin-eng.github.io/blog/post/time_lapse_2020/</guid>
+      <description>Overview In 2020 we had some unprecedented movements in global markets coming from the Covid-19 pandemic. Initially the hit to asset prices was tremendous and volatility got to highs not seen for a long time. For a moment, the paradigm of putting on a carry trades in all asset classes, seemed completely vanished. But this short glimpse at how market forces could reach new equilibrium price levels, was just not bearable for institutions in developed capital markets.</description>
+    </item>
+    
+  </channel>
+</rss>

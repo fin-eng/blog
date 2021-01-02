@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My Rates Notebook.</title>
+    <link>http://localhost:1313/blog/</link>
+    <description>Recent content on My Rates Notebook.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Code released under the Apache 2.0 license.</copyright>
+    <lastBuildDate>Wed, 23 Dec 2020 12:34:17 +0200</lastBuildDate><atom:link href="http://localhost:1313/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About</title>
+      <link>http://localhost:1313/blog/about/</link>
+      <pubDate>Sun, 24 May 2015 18:51:50 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/about/</guid>
+      <description>My name is Oliver Kahl. Before I introduce myself properly, allow me to guess, that you are as enthusiastic and interested in finance and markets as the many people in the industry I am daily talking to: be it in person, phone, chat, blog or whatever means of communication. Given that you are also thrilled and excited what rapid change finance has and will experience in the light of brilliant technologies at our fingertips &amp;ndash; probably we have a perfect match.</description>
+    </item>
+    
+    <item>
+      <title>EUR Rates &amp; Volatility -- A visual retrospective on 2020</title>
+      <link>http://localhost:1313/blog/post/time_lapse_2020/</link>
+      <pubDate>Wed, 23 Dec 2020 12:34:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/time_lapse_2020/</guid>
+      <description>Overview In the first article of this mini series we talked about building Continuous Futures which satisfy our requirements for deriving consistent PnL figures for our position keeping, as well as generating trading signals not effected by roll gaps between contracts. A solution of simply splicing contracts after each other clearly didn’t qualify, and we came up with the Panama Method being the closest to an ideal time-series for our data set of German Government Bonds (Schatz, Bobl, Bund).</description>
+    </item>
+    
+    <item>
+      <title>Switching to €STR: &#34;Big Bang&#34; troubles for Swaptions</title>
+      <link>http://localhost:1313/blog/post/estr_discounting_swaptions/</link>
+      <pubDate>Sat, 29 Feb 2020 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/estr_discounting_swaptions/</guid>
+      <description>Overview On 2nd of October 2019, the ECB first published €STR, an overnight interest rate which effectively replaces EONIA within the EU benchmark reform framework. For the transition period, until 3rd January 2022, EONIA is still published as a 8.5 basis points spread above €STR. The ECB working group on euro risk-free rates made the recommendation to switch interest paid on collateral from EONIA to €STR. While different approaches for the transition were considered, the preferred one was a so called &amp;#34;big bang&amp;#34; introduction: moving completely away from EONIA to €STR flat while compensating for PnL implications due to the 8.</description>
+    </item>
+    
+    <item>
+      <title>Switching to €STR: &#34;Big Bang&#34; troubles for Swaptions</title>
+      <link>http://localhost:1313/blog/post/estr_discounting_swaptions_ii/</link>
+      <pubDate>Sat, 29 Feb 2020 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/estr_discounting_swaptions_ii/</guid>
+      <description>Overview On 2nd of October 2019, the ECB first published €STR, an overnight interest rate which effectively replaces EONIA within the EU benchmark reform framework. For the transition period, until 3rd January 2022, EONIA is still published as a 8.5 basis points spread above €STR. The ECB working group on euro risk-free rates made the recommendation to switch interest paid on collateral from EONIA to €STR. While different approaches for the transition were considered, the preferred one was a so called &amp;#34;big bang&amp;#34; introduction: moving completely away from EONIA to €STR flat while compensating for PnL implications due to the 8.</description>
+    </item>
+    
+    <item>
+      <title>An introduction to the Plotly Dash Library</title>
+      <link>http://localhost:1313/blog/post/dash_tutorial/</link>
+      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/dash_tutorial/</guid>
+      <description>Overview During my Continuous Futures project I was already impressed by the capabilities of Plotly with regards to all the nice interactivity it brings to data visualisation. In combination with Cufflinks it turned out to be an even more powerful tool for handling financial data. A little drawback, at least for somebody who is a trader in the first place, was the tricky embedding of those Plotly objects into web based environments.</description>
+    </item>
+    
+    <item>
+      <title>Collateralized Cash Price --- An introduction to the new settlement standard in Swaptions</title>
+      <link>http://localhost:1313/blog/post/cash_physical_intro/</link>
+      <pubDate>Wed, 07 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/cash_physical_intro/</guid>
+      <description>Overview For years the Euro Swaption Market was split into two major types of settlement methods: one being Physical and the other one being a cash settlement based on an Internal Rate of Return (IRR). The latter was causing that many serious valuation problems recently that a new market standard will be established, effective from 26th November 2018 onwards, where the IRR will be &amp;#34;swapped&amp;#34; for a discount rate associated with collateralized swap contracts: a Collateralized Cash Price (CCP).</description>
+    </item>
+    
+    <item>
+      <title>Collateralized Cash Price --- A consistent pricing framework (part I)</title>
+      <link>http://localhost:1313/blog/post/cash_physical_part_i/</link>
+      <pubDate>Sat, 26 May 2018 12:53:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/cash_physical_part_i/</guid>
+      <description>Overview With the change in the market standard cash settlement convention from an Internal Rate of Return (IRR) approach to Cash Collateralized Price (CCP), effective in September or October 2018, remains a bit of a challenge to put legacy trades, forthcoming new-style transactions, and physically settled contracts into a consisting pricing framework.
+ In this small series we will present a Python implementation in which all mentioned trades are valued in an arbitrage free fashion.</description>
+    </item>
+    
+    <item>
+      <title>Collateralized Cash Price --- A consistent pricing framework (part II)</title>
+      <link>http://localhost:1313/blog/post/cash_physical_part_ii/</link>
+      <pubDate>Sat, 26 May 2018 12:51:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/cash_physical_part_ii/</guid>
+      <description>Overview In the previous article, we gathered all the data needed. We will now utilize that information to calibrate our model. As it takes some functions and dependencies, our approach will be to put all the calibration code into three classes. In that regard we will have an &amp;#34;ImpliedVol&amp;#34; class, which does the vol implication from premiums. Also we have a superclass &amp;#34;CashPhyATM&amp;#34;, doing the basic calibration for ATM data. There is a subclass to &amp;#34;CashPhyATM&amp;#34;, called &amp;#34;CashPhyOTM&amp;#34;, calculating all the OTM values.</description>
+    </item>
+    
+    <item>
+      <title>Continuous Futures --- Construction Methods</title>
+      <link>http://localhost:1313/blog/post/continuous_futures_part1/</link>
+      <pubDate>Sat, 26 May 2018 12:50:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/continuous_futures_part1/</guid>
+      <description>Overview Futures are an excellent way of gaining access and exposure to various asset classes. The contracts are often much more liquid than their underlyings, long- and short positions can be entered equally easy, and there is no cash changing hands involved by entering a position (we only refer here to the investment needed for being long in the cash market; of course there is margining with Futures, which also implies needs for liquidity).</description>
+    </item>
+    
+    <item>
+      <title>Collateralized Cash Price --- A consistent pricing framework (part III)</title>
+      <link>http://localhost:1313/blog/post/cash_physical_part_iii/</link>
+      <pubDate>Sat, 26 May 2018 12:43:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/cash_physical_part_iii/</guid>
+      <description>Overview In the previous article we calibrated cash IRR payer, cash IRR receiver and physical vols in the physical measure. These sets of vols allowed us to value all settlement types in an arbitrage-free fashion. Nevertheless, what we were still lacking, was a complete vol cube for every single settlement type. As it is well known that &amp;#34;regular&amp;#34; interpolation techniques fail with respect that they are not proven to be free of arbitrage, we select the SABR model as a popular choice for completing the vol cube.</description>
+    </item>
+    
+    <item>
+      <title>Continuous Futures --- Visualization &amp; Signal Analysis</title>
+      <link>http://localhost:1313/blog/post/continuous_futures_part2/</link>
+      <pubDate>Sat, 26 May 2018 12:34:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/continuous_futures_part2/</guid>
+      <description>Overview In the first article of this mini series we talked about building Continuous Futures which satisfy our requirements for deriving consistent PnL figures for our position keeping, as well as generating trading signals not effected by roll gaps between contracts. A solution of simply splicing contracts after each other clearly didn’t qualify, and we came up with the Panama Method being the closest to an ideal time-series for our data set of German Government Bonds (Schatz, Bobl, Bund).</description>
+    </item>
+    
+  </channel>
+</rss>

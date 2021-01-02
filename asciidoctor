@@ -5,7 +5,7 @@ if [ -f /usr/local/bin/asciidoctor ]; then
   ad="/usr/local/bin/asciidoctor"
 fi
 
-$ad -v -B . -r asciidoctor-diagram -a icons=font -a docinfo=shared -a nofooter -a sectanchors -a experimental=true -a figure-caption! -a source-highlighter=highlightjs -a toc-title! -a stem=mathjax - | sed -E -e "s/img src=\"([^/]+)\"/img src=\"\/diagram\/\1\"/"
+$ad -v -B . -r asciidoctor-diagram --no-header-footer -a allow-uri-read -a icons=font -a docinfo=shared -a nofooter -a sectanchors -a experimental=true -a figure-caption! -a source-highlighter=highlightjs -a toc-title! -a stem=mathjax - | sed -E -e "s/img src=\"([^/]+)\"/img src=\"\/diagram\/\1\"/"
 
 mkdir -p static/diagram
 

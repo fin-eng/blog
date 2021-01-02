@@ -7,7 +7,7 @@ theme = "startbootstrap-clean-blog"
 languageCode = "en-us"
 copyright = "Code released under the Apache 2.0 license."
 googleAnalytics = "UA-123-45" # delete or comment to disable Google Analytics JS generation
-disqusShortname = "oliverkahl" #delete or comment to disable Disqus comments
+disqusShortname = "disqus_kCCDxZNXRg" #delete or comment to disable Disqus comments
 
 smartDashes = true
 
@@ -19,6 +19,7 @@ smartDashes = true
 [author]
   name = "Oliver Kahl"
 
+
 [params]
   DateForm = "Mon, Jan 2, 2006"
   Description = "Sharing my thoughts on Rates, Trading, Derivatives, XVA, Python"
@@ -26,6 +27,7 @@ smartDashes = true
   email = "oliverkahl@gmx.de" #Remove this line if you would prefer not to use an email button in the footer.
   postSummariesFrontPage = 4 #Number of post summaries to show on front page, comment out to allow default(4)
   showReadTime = false #set to false to exclude read time from header of post
+    custom_css = ["css/custom.css"]
 
 [[params.social]]
   title = "twitter"

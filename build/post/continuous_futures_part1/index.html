@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head><script src="/livereload.js?port=1313&amp;mindelay=10&amp;v=2" data-no-instant defer></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Continuous Futures --- Construction Methods -- My Rates Notebook.</title>
+
+    
+
+    
+    <link href="http://localhost:1313/blog//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://localhost:1313/blog//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://localhost:1313/blog/">My Rates Notebook.</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://localhost:1313/blog/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://localhost:1313/blog/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://localhost:1313/blog/post/">Archives</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    
+    <header class="intro-header" style="background-image: url('http://localhost:1313/blog//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Continuous Futures &mdash; Construction Methods</h1>
+               <h2 class="subheading">Building a Continuous Futures Contract with Python</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Oliver Kahl</a> on Sat, May 26, 2018
+<br />
+Tags: <a href="http://localhost:1313/blog/tags/quant-trading">quant trading</a>, <a href="http://localhost:1313/blog/tags/python">python</a>, <a href="http://localhost:1313/blog/tags/technical-analysis">technical analysis</a>
+
+<br />
+
+   Series: <a href="http://localhost:1313/blog/series/continuous-futures">Continuous Futures</a>
+
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <div class="sect2">
+<h3 id="_overview">Overview</h3>
+<div class="paragraph">
+<p>Futures are an excellent way of gaining access and exposure to
+various asset classes. The contracts are often much more liquid than
+their underlyings, long- and short positions can be entered equally
+easy, and there is no cash changing hands involved by entering a
+position (we only refer here to the investment needed for being long
+in the cash market; of course there is margining with Futures, which
+also implies needs for liquidity). Nevertheless traders and
+researchers have to consider certain specialities of Futures which
+may come as a downside: one of those is clearly handling the chain of
+contracts over time. Questions around that could be be simple like:
+&#34;What has to be done to stay invested over a medium or a long term by
+rolling over from one contract to the other? Other, more subtle
+questions are such as: &#34;What are the implications of the price gaps
+between contracts? What does the gap actually mean and does it has a
+systematic direction (&#34;carry&#34;)? Do we have to take
+care about this and how are my trading signals, backtesting, and
+PnL influenced?&#34;</p>
+</div>
+<div class="paragraph">
+<p>We will tackle the above questions in a series of two articles, where
+the first one  will discuss and implement methods to consistently
+trade and analyze Futures in the light of gaps between the various
+contracts over time. The <a href="http://localhost:1313/blog/post/continuous_futures_part2/">second article</a> will be much
+more about prominent trading signals such as MACD, RSI, or Bollinger
+Bands. There we will also spent a decent amount of time on
+visualization of the differently edited time series and what the
+various methods mean for the actual trading signals.</p>
+</div>
+<div class="paragraph">
+<p>The time series for our analysis will be short-, medium-, and long
+term German Government Bond Futures (Schatz, Bobl, Bund). With
+regards to our technical focus, we will utilize Python and present
+all the code involved to make everything outlined here easy to
+replicate by yourself.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_some_basics_about_futures_trading">Some basics about Futures trading</h3>
+<div class="sect3">
+<h4 id="_futures_terminology">Futures terminology</h4>
+<div class="paragraph">
+<p>Before we will carry out a certain methodology, we will visit some
+common procedures to generate a continuous time-series. For all this,
+there is some terminology needed, which frequently comes with
+Futures. For our purposes we will refer to front and back
+contracts, where the front contract is the first Futures due for
+expiry, while the back contract matures later by a particular
+frequency (often one or three months after the front contract). In the
+context of comparing the prices between two subsequent Futures, a
+higher price in the back contract is referred to as contango,
+while we speak of backwardation in case of the opposite price
+relationship. Another important aspect is the tick size and the
+tick value of a contract. Tick size refers to the smallest
+possible price movement and tick value is the loss or gain incurred
+by that movement.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_basis_between_subsequent_futures_contracts">Basis between subsequent Futures contracts</h4>
+<div class="paragraph">
+<p>So first of all, we have to ask, why there is a difference in the
+price in subsequent Futures contracts at all? To gain an
+understanding of this, one way is to follow the close link between
+Futures contract and underlying, and at the same time acknowledge
+that, – given an arbitrage free world – a holding, whether in the
+underlying or the Futures, will yield exactly in the same payoffs
+for the investor. So more precisely, the cost of holding the
+underlying until the next respective expiration date, determines the
+gap between two contracts. Depending on the market, those influence
+factors can be repo rates, dividends, storage costs, etc.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_building_a_continuous_futures_contract">Building a Continuous Futures contract</h3>
+<div class="sect3">
+<h4 id="_available_methods_at_a_glance">Available methods at a glance</h4>
+<div class="paragraph">
+<p>Before we start implementing algorithms to come up with a Continuous
+Futures time-series, we will shortly discuss the most prominent
+techniques available in that space.</p>
+</div>
+<div class="paragraph">
+<p><strong>1. Splicing contracts together with no adjustments</strong></p>
+</div>
+<div class="paragraph">
+<p>This is the typically done already by market data providers like
+Bloomberg or Reuters (FGBLc1 for the spliced Bund for instance). We
+will (possibly) end up in a price jump on the day when contracts are
+switched. In case trading signals (see <a href="http://localhost:1313/blog/post/continuous_futures_part2/">second article</a>) are extracted
+from those series, we rely on a mix of inputs from both contracts
+potentially yielding a biased result as the price jump is inherited in
+the calculations. We also receive a distorted picture with regards to
+backtesting the PnL of any strategy relying on such a time series.
+Just imagine a MACD strategy would make you buy just before the front
+contract matures and sell straight after in the back contract (or the
+then front contract at the point in time of selling). Assuming a
+contango you would clearly overstate your profit.</p>
+</div>
+<div class="paragraph">
+<p><strong>2. Splicing contracts together with explicitly accounting for a roll over</strong></p>
+</div>
+<div class="paragraph">
+<p>In the above mentioned MACD strategy example, we would clearly
+correct the inflated PnL by selling the front contract and buying
+into the back contract simultaneously at or just before expiry.
+Afterwards, we would then sell the former back contract (being the new
+front contract by now) correctly reflecting the price jump in our
+performance measurement. But still, we are left with biased signals
+from strategies relying on both contracts.</p>
+</div>
+<div class="paragraph">
+<p><strong>3. Continuously adjusting the contracts over time (&#34;Perpetual Method&#34;)</strong></p>
+</div>
+<div class="paragraph">
+<p>In a nutshell, the Perpetual Method applies weights to front and
+back contract over a pre-defined period of time. So to say, we trade
+out of the &#34;old&#34; contract into the &#34;new&#34; in a linear fashion. For
+instance, if we assume 5 roll over days, we do the weighting according
+to the following scheme:</p>
+</div>
+<table class="tableblock frame-ends grid-all" style="width: 80%;">
+<colgroup>
+<col style="width: 16.6666%;"/>
+<col style="width: 16.6666%;"/>
+<col style="width: 16.6666%;"/>
+<col style="width: 16.6666%;"/>
+<col style="width: 16.6666%;"/>
+<col style="width: 16.667%;"/>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Contract</th>
+<th class="tableblock halign-left valign-top">Day 1</th>
+<th class="tableblock halign-left valign-top">Day 2</th>
+<th class="tableblock halign-left valign-top">Day 3</th>
+<th class="tableblock halign-left valign-top">Day 4</th>
+<th class="tableblock halign-left valign-top">Day 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Front</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">80%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">60%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">40%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0%</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Back</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">40%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">60%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">80%</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100%</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Applying this method clearly improves the sudden price change
+introduced by switching to a new contract by smoothing the roll over
+according to the weighting scheme. Note that trading has also to be
+set up accordingly to make everything consistent.</p>
+</div>
+<div class="paragraph">
+<p><strong>4. Splicing contracts together with forward or backward adjustments (&#34;Panama Adjustment&#34;)</strong></p>
+</div>
+<div class="paragraph">
+<p>The Panama Adjustment either adjusts the actual (forward) or the
+historical (backward) contracts, such that they align in a smooth
+fashion on expiry date. While overcoming the distortion on signal
+generation due to a smooth time series, we are left with biased
+relative price performance stemming from absolute series adjustments
+(the absolute gaps between contracts). This can also leads to
+potentially strong data trends, especially over long time horizons
+(with even the possibility of negative prices). However, the prior
+PnL or performance unit of Futures is the tick value, which
+still can be easily interpreted correctly, even if we would analyze a
+time series trending away substantially from the original Futures
+prices.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_determine_the_method_of_choice_for_a_continuous_futures_with_our_data_set">Determine the method of choice for a Continuous Futures with our data set</h3>
+<div class="paragraph">
+<p>From the above discussion the Panama Adjustment as well as the
+Perpetual Method sound promising. We will test the two and benchmark
+them against simply Splicing Contracts with the already identified
+drawbacks. For the simple splicing we will utilize generic Thomson
+Reuters Eikon Futures contracts being fetched by the Python API. We
+will then process the observed data in Python, analyze the outcomes,
+and pick our method of choice.</p>
+</div>
+<div class="sect3">
+<h4 id="_spliced_contracts">Spliced contracts</h4>
+<div class="paragraph">
+<p>As mentioned above, we we pick German Government Bond Futures
+(Schatz, Bobl, Bund) for our analysis. We collect daily OHLCV
+(&#34;Open&#34;, &#34;High&#34;, &#34;Low&#34;, &#34;Close&#34;, &#34;Volume&#34;) market data for the
+respective securities in a dict of Pandas DataFrames. Thomson
+Reuters Eikon offers Continuous (&#34;spliced together&#34;) Futures data
+by calling the ticker symbol (i. e. &#34;FGBL&#34; for the Bund) and &#34;c1&#34; and
+&#34;c2&#34; for the continuous front and back contract. The following code
+will do this for us:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">import numpy as np # <b class="conum">(1)</b>
+import pandas as pd
+import eikon as ek
+import configparser
+
+config = configparser.ConfigParser() # <b class="conum">(2)</b>
+config.read(&#39;logins.cfg&#39;)
+ek.set_app_id(config[&#39;eikon&#39;][&#39;app_id&#39;])
+
+def get_fut_front_back(start_date, end_date, front_perpr = [&#39;FGBLc1&#39;, &#39;FGBMc1&#39;, &#39;FGBSc1&#39;], # <b class="conum">(3)</b>
+                back_perpr = [&#39;FGBLc2&#39;, &#39;FGBMc2&#39;, &#39;FGBSc2&#39;],
+                fields = [&#39;OPEN&#39;, &#39;LOW&#39;, &#39;HIGH&#39;, &#39;CLOSE&#39;, &#39;VOLUME&#39;]):
+    &#39;&#39;&#39;
+    Fetch daily Futures data for front and back contract and return as dict of dfs.
+    Pass in start and end date as &#39;yyyy-mm-dd&#39;.
+    Front and back contracts are passed as list objects with Bund, Bobl, Schatz as pre-selection.
+    &#39;&#39;&#39;
+    data_dict = {}
+    start_date = pd.to_datetime(start_date)
+    end_date = pd.to_datetime(end_date)
+    fields = fields
+    for i in range(len(front_perpr)):
+                data_dict[front_perpr[i][0:-2]] = ek.get_timeseries([
+                                                    front_perpr[i], back_perpr[i]
+                                                    ],
+                                                    fields=fields,
+                                                    start_date=str(start_date),
+                                                    end_date=str(end_date),
+                                                    interval=&#39;daily&#39;
+                                                    )
+    return data_dict
+
+data_dict = get_fut_front_back(&#39;2017-1-1&#39;, &#39;2017-11-17&#39;) # <b class="conum">(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Library imports</p>
+</li>
+<li>
+<p>Setup Thomson Reuters Eikon Python API</p>
+</li>
+<li>
+<p>Function for data retrieval</p>
+</li>
+<li>
+<p>Write time-series to dict variable data_dict</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>We can easily visualize the roll gap for the Bund March &#39;18 roll with
+Matplotlib. Below you see the front contract (&#34;FGBLc1&#34;, dashed red line) and
+the back contract (&#34;FGBLc2&#34;, blue solid line). On the 8th, &#34;FGBLc1&#34; expires and
+therefore &#34;FGBLc2&#34; becomes the new &#34;FGBLc1&#34;. That is why you see the
+sudden drop in the time-series.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="http://localhost:1313/blog/continuous_futures/roll_gap.png" alt="Spliced"/>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_perpetual_method">Perpetual Method</h4>
+<div class="paragraph">
+<p>To implement the Perpetual Method as outlined above, we define a
+function &#34;get_perp_fut&#34;. The function basically takes the already
+fetched DataFrames consisting of spliced front and back contracts as
+&#34;market_data&#34; argument. Additionally, the rollover days and the data
+columns can be specified. Below is the Python representation of that
+function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">def get_perp_fut(market_data, expiry_dates, rollover_days=5, # <b class="conum">(1)</b>
+                 data_cols=[&#39;OPEN&#39;, &#39;LOW&#39;, &#39;HIGH&#39;, &#39;CLOSE&#39;, &#39;VOLUME&#39;]):
+    &#39;&#39;&#39;
+    Converts a df of pairs of Futures contracts (&#39;Front&#39; &amp; &#39;Back&#39; ) into a continuous
+    time series returned as df.
+    Pass in market data as df.
+    expiry_dates takes an excel file (i.e. &#34;Futures_Exp.xlsx&#34;)
+    with column A beeing the Futures name and column B being the expiry date.
+    No column headers.
+    We take European dates (dd-mm-yyyy).
+
+    &#39;&#39;&#39;
+    market_data.columns.set_levels([&#39;Front&#39;, &#39;Back&#39;], 0, inplace = True)
+    expiry_dates = pd.read_excel(expiry_dates, header=None, index_col=0, squeeze=1)
+    expiry_dates = pd.to_datetime(expiry_dates.values, dayfirst = True)
+    columns = pd.MultiIndex.from_tuples(tuple(zip(
+        [&#39;Front&#39;] * len(data_cols) + [&#39;Back&#39;] * len(data_cols), data_cols * 2)
+                                             ))
+    roll_weights = pd.DataFrame(np.zeros((len(market_data.index), 2 * len(data_cols))),
+                        index = market_data.index, columns=columns)
+    decay_weights = np.repeat(np.linspace(0, 1, rollover_days + 1),
+                        int(len(data_cols))).reshape(rollover_days + 1,
+                            int(len(data_cols)))
+
+    for i in range(len(expiry_dates)):
+        roll_weights.loc[expiry_dates[i]:, &#39;Front&#39;] = 1
+        roll_weights_target = roll_weights.iloc[
+                            roll_weights.index.get_loc(expiry_dates[i]) - rollover_days :
+                            roll_weights.index.get_loc(expiry_dates[i]) + 1
+                            ].index
+        roll_weights.loc[roll_weights_target, &#39;Back&#39;] = decay_weights
+        roll_weights.loc[roll_weights_target, &#39;Front&#39;] = 1 - decay_weights
+
+    roll_weights_target = roll_weights.iloc[
+                        0 : roll_weights.index.get_loc(expiry_dates[0]) - rollover_days
+                        ].index
+    roll_weights.loc[roll_weights_target, &#39;Front&#39;] = 1
+    weighted_fut = roll_weights * market_data
+    perp_fut = weighted_fut[&#39;Front&#39;] + weighted_fut[&#39;Back&#39;].fillna(0)
+
+    return perp_fut
+
+for key in data_dict.copy().keys(): # <b class="conum">(2)</b>
+    data_dict[&#39;%s_perp_10&#39; % key] = get_perp_fut(
+        data_dict[key], &#39;Gov_Futures_Exp.xlsx&#39;, rollover_days=10)
+    data_dict[&#39;%s_perp_40&#39; % key] = get_perp_fut(
+        data_dict[key], &#39;Gov_Futures_Exp.xlsx&#39;, rollover_days=40)</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Function to get Perpetual Method time-series</p>
+</li>
+<li>
+<p>Add time-series with 10 and 40 rollover days to data_dict</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Probably the best way of seeing how our just created Continuous
+Futures performs is to visualize the outcome. Again we use
+Matplotlib and specify 10 and 40 days respectively as rollover
+period. We also include our Spliced Contracts series as benchmark.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="http://localhost:1313/blog/continuous_futures/perpetual_method.png" alt="Perpetual"/>
+</div>
+</div>
+<div class="paragraph">
+<p>We can conclude that – given the large roll gaps especially for
+Bobl and Bund – , a longer roll period enhances the &#34;smoothness&#34;
+of the time-series. But still, even if we use 40 days, we amend our
+data in a way that is probably not a perfect fit. For instance,
+consider the highlighted area in the Bund chart: For 10 roll days we
+completely miss the daily market directions. On those 10 days, we are
+dragged down by the roll gap, such that we artificially create
+a downward trend that never really existed. If we look at the 40 roll
+days, we are clearly able to better capture the daily movements, but
+still, we are missing another element, which is the slight upward
+trend during the roll. To make the Perpetual Method a better fit, we
+would even have to lengthen the rollover further. By this we would run
+into other areas of trouble, namely an illiquid back contract and a
+hugely complex trading in case we want to do this consistently to our
+rollover.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_panama_method">Panama Method</h4>
+<div class="paragraph">
+<p>Here we proceed basically the same like above: From our simple spliced
+contracts we form a smooth time series by defining a Python function
+doing the heavy-lifting for us. To be in line with prices in the
+market, we keep the most recent data unadjusted and cumulate the roll
+gap backwards over time. As the basis of the relevant Futures prices
+tend to be quite volatile just before the roll, we average the 4
+trading days just before expiry. Given an absence of a particular view
+on price direction during roll, that makes sense to limit risks in
+trading, if the actual position is rolled over accordingly (we borrow
+a bit from the Perpetual Method here).</p>
+</div>
+<div class="paragraph">
+<p>The code snippet below will illustrate our methodology:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">def get_pan_fut(market_data, expiry_dates, # <b class="conum">(1)</b>
+                data_cols=[&#39;OPEN&#39;, &#39;LOW&#39;, &#39;HIGH&#39;, &#39;CLOSE&#39;, &#39;VOLUME&#39;]):
+    &#39;&#39;&#39;
+    Converts a df of pairs of Futures contracts (&#39;Front&#39; &amp; &#39;Back&#39; )
+    into a continuous time series returned as df.
+    Pass in market data as df.
+    expiry_dates takes an excel file (i.e. &#34;Futures_Exp.xlsx&#34;)
+    with column A beeing the Futures name and column B being the expiry date.
+    No column headers. We take European dates (dd-mm-yyyy).
+
+    &#39;&#39;&#39;
+    market_data.columns.set_levels([&#39;Front&#39;, &#39;Back&#39;], 0, inplace = True)
+    expiry_dates = pd.read_excel(expiry_dates, header=None, index_col=0, squeeze=1)
+    expiry_dates = pd.to_datetime(expiry_dates.values, dayfirst = True)
+    pan_fut = pd.DataFrame(np.zeros((len(market_data.index), len(data_cols))), # <b class="conum">(1)</b>
+                        index = market_data.index, columns=data_cols)
+    roll_adjustment_total = np.zeros([len(data_cols), 1])
+    pan_fut.iloc[pan_fut.index.get_loc(expiry_dates[-1]) + 1:] = market_data[&#39;Front&#39;].iloc[
+        market_data[&#39;Front&#39;].index.get_loc(expiry_dates[-1]) + 1:]
+    for i in reversed(range(len(expiry_dates))):
+        pan_fut.loc[expiry_dates[i]] = roll_adjustment_total.reshape(
+            1, len(data_cols)) + market_data[&#39;Back&#39;].loc[expiry_dates[i]].values
+        roll_adjustment = market_data[&#39;Back&#39;][&#39;CLOSE&#39;].iloc[
+            market_data[&#39;Front&#39;].index.get_loc(expiry_dates[i]) - 4:
+            market_data[&#39;Front&#39;].index.get_loc(expiry_dates[i])
+        ] - market_data[&#39;Front&#39;][&#39;CLOSE&#39;].iloc[
+            market_data[&#39;Back&#39;].index.get_loc(expiry_dates[i]) - 4:
+            market_data[&#39;Back&#39;].index.get_loc(expiry_dates[i])
+        ]
+        roll_adjustment = np.repeat(roll_adjustment.values.mean(), len(data_cols) - 1)
+        roll_adjustment = np.append(roll_adjustment, 0)
+        roll_adjustment = roll_adjustment.reshape(len(data_cols), 1)
+        roll_adjustment_total += roll_adjustment
+        if i &gt; 0:
+            roll_target = market_data[&#39;Front&#39;].iloc[
+                market_data[&#39;Front&#39;].index.get_loc(expiry_dates[i - 1]) + 1:
+                market_data[&#39;Front&#39;].index.get_loc(expiry_dates[i])].index
+            roll_adjustment_target = np.tile(roll_adjustment_total, len(roll_target)).T
+            pan_fut.loc[roll_target] = roll_adjustment_target + market_data[&#39;Front&#39;].loc[
+                roll_target]
+        else:
+            roll_target = market_data[&#39;Front&#39;].iloc[
+                0:market_data[&#39;Front&#39;].index.get_loc(expiry_dates[i])].index
+            roll_adjustment_target = np.tile(roll_adjustment_total, len(roll_target)).T
+            pan_fut.loc[roll_target] = roll_adjustment_target + market_data[&#39;Front&#39;].loc[
+                roll_target]
+    return pan_fut
+
+for key in data_dict.copy().keys(): # <b class="conum">(2)</b>
+    data_dict[&#39;%s_pan&#39; % key] = get_pan_fut(data_dict[key], &#39;Gov_Futures_Exp.xlsx&#39;)</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Function to get Panama Method time-series</p>
+</li>
+<li>
+<p>Add time-series to data_dict</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>We again visualize the outcome with Matplotlib. The most encouraging
+point can be seen at a first glance: Even with large roll gaps, we
+don’t introduce some new, non existent trends into our data. Of
+course, we pay the price with a growing and growing divergence from
+the real data if we travel backwards in time. But again, this seems to
+be a price worth paying, if we interpret our data correctly.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="http://localhost:1313/blog/continuous_futures/panama_method.png" alt="Panama"/>
+</div>
+</div>
+<div class="paragraph">
+<p>To get a better feeling of how a even longer time-series would be
+changed, here are our contracts with the Panama Method back as far
+as 2000-1-1 (a period which was almost entirely a bull market for
+government bonds). You can see how nice being long over that period
+would have been, as carry even enhances the stellar return for the
+buyer.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="http://localhost:1313/blog/continuous_futures/panama_method_2000.png" alt="Panama_2000"/>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_our_method_of_choice">Our method of choice</h3>
+<div class="paragraph">
+<p>With the rather large gaps between contracts in our time series, we
+choose the Panama Method over the Perpetual Method. This is
+especially significant for Bobl and Bund, while on Schatz we are
+a bit more relaxed towards the method, as roll gaps are not that
+significant.</p>
+</div>
+<div class="paragraph">
+<p>In the <a href="http://localhost:1313/blog/post/continuous_futures_part2/">next
+article</a> of this series we utilize our
+Continuous Futures contract for generating trading signals on
+popular technical analysis measures. We will compare those signals to
+the simple Spliced Contracts benchmark. As technical analysis is a
+rather visual topic, we will switch from Matplotlib to a combination
+of the Cufflinks and Plotly libraries more suited for building
+charts in the trading context and nice HTML hover effects coming on
+top of it.</p>
+</div>
+<div class="paragraph">
+<p>That being said, some additional remarks on our framework: There is
+surely further room to improve upon all this by fine tuning the
+methodology. One branch might be to further align trading, performance
+measurement and signal generation for example by switching from our
+vectorised approach to an event-driven approach with more granular
+data on intra-day basis.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_downloads">Downloads</h3>
+<div class="paragraph">
+<p><a href="https://www.icloud.com/iclouddrive/0Rgvba4u92ecCsQgZ1cwlF-FQ#Continuous_Futures">Jupyter Notebook</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_references">References</h3>
+<div class="paragraph">
+<p><a href="https://www.quantstart.com/articles/Continuous-Futures-Contracts-for-Backtesting-Purposes">Continuous
+Futures for Backtesting Purposes</a></p>
+</div>
+<div class="paragraph">
+<p><a href="http://www.ipedr.com/vol29/48-CEBMM2012-R00003.pdf">Continuous
+futures data series for back testing and technical analysis</a></p>
+</div>
+<div class="paragraph">
+<p><a href="http://www.seykota.com/tribe/TSP/Continuous/index.htm">Continuous
+Contracts</a></p>
+</div>
+<script>
+var tables, i;
+tables = document.getElementsByTagName('table');
+for (i=0;i<tables.length;i++) {
+  tables[i].className = 'table table-condensed';
+}
+</script>
+</div>
+
+                  
+    
+    <hr/>
+	<p><a href="" id="series"></a>This is a post in the 
+	<b>Continuous Futures</b> series.<br/>
+	Other posts in this series:</p>
+
+    
+    
+    <ul class="series">
+    
+    	<li>May 26, 2018 -
+    	<a href="http://localhost:1313/blog/post/continuous_futures_part1/">Continuous Futures &mdash; Construction Methods</a></li>
+    
+    	<li>May 26, 2018 -
+    	<a href="http://localhost:1313/blog/post/continuous_futures_part2/">Continuous Futures &mdash; Visualization &amp; Signal Analysis</a></li>
+    
+    </ul>
+ 
+
+                  <div id="disqus_thread"></div>
+<script>
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://larnsce.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/by/disqus_kCCDxZNXRg/">comments powered by Disqus.</a></noscript>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:oliverkahl@gmx.de">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/KahlOliver">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.linkedin.com/in/oliver-kahl-cfa-20077039/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.xing.com/profile/Oliver_Kahl8/cv/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-xing fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Code released under the Apache 2.0 license.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://localhost:1313/blog//js/jquery.min.js"></script>
+
+    
+    <script src="http://localhost:1313/blog//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://localhost:1313/blog//js/clean-blog.js"></script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+</body>
+
+</html>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+

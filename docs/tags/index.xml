@@ -7,17 +7,58 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Code released under the Apache 2.0 license.</copyright>
-    <lastBuildDate>Sat, 29 Feb 2020 12:54:17 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://fin-eng.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Plotly</title>
+      <link>https://fin-eng.github.io/blog/tags/plotly/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://fin-eng.github.io/blog/tags/plotly/</guid>
+      <description></description>
+    </item>
     
-	<atom:link href="https://fin-eng.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>rates</title>
+      <link>https://fin-eng.github.io/blog/tags/rates/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://fin-eng.github.io/blog/tags/rates/</guid>
+      <description></description>
+    </item>
     
+    <item>
+      <title>swaps</title>
+      <link>https://fin-eng.github.io/blog/tags/swaps/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://fin-eng.github.io/blog/tags/swaps/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Swaptions</title>
       <link>https://fin-eng.github.io/blog/tags/swaptions/</link>
-      <pubDate>Sat, 29 Feb 2020 12:54:17 +0200</pubDate>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://fin-eng.github.io/blog/tags/swaptions/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Visualisation</title>
+      <link>https://fin-eng.github.io/blog/tags/visualisation/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://fin-eng.github.io/blog/tags/visualisation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>volatility</title>
+      <link>https://fin-eng.github.io/blog/tags/volatility/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://fin-eng.github.io/blog/tags/volatility/</guid>
       <description></description>
     </item>
     
@@ -36,24 +77,6 @@
       <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
       
       <guid>https://fin-eng.github.io/blog/tags/dash/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Data Visualization</title>
-      <link>https://fin-eng.github.io/blog/tags/data-visualization/</link>
-      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
-      
-      <guid>https://fin-eng.github.io/blog/tags/data-visualization/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Plotly</title>
-      <link>https://fin-eng.github.io/blog/tags/plotly/</link>
-      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
-      
-      <guid>https://fin-eng.github.io/blog/tags/plotly/</guid>
       <description></description>
     </item>
     

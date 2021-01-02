@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head><script src="/livereload.js?port=1313&amp;mindelay=10&amp;v=2" data-no-instant defer></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>An introduction to the Plotly Dash Library -- My Rates Notebook.</title>
+
+    
+
+    
+    <link href="http://localhost:1313/blog//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://localhost:1313/blog//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://localhost:1313/blog/">My Rates Notebook.</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://localhost:1313/blog/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://localhost:1313/blog/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://localhost:1313/blog/post/">Archives</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    
+    <header class="intro-header" style="background-image: url('http://localhost:1313/blog//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>An introduction to the Plotly Dash Library</h1>
+               <h2 class="subheading">Plotly is celebrated for its beautiful interactive graphs, figures and tables. Cufflinks brings in the finance tools.  Dash let you combine all those to powerful web apps.</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Oliver Kahl</a> on Tue, Nov 27, 2018
+<br />
+Tags: <a href="http://localhost:1313/blog/tags/python">python</a>, <a href="http://localhost:1313/blog/tags/plotly">plotly</a>, <a href="http://localhost:1313/blog/tags/cufflinks">cufflinks</a>, <a href="http://localhost:1313/blog/tags/dash">dash</a>, <a href="http://localhost:1313/blog/tags/data-visualization">data visualization</a>, <a href="http://localhost:1313/blog/tags/quant-trading">quant trading</a>, <a href="http://localhost:1313/blog/tags/technical-analysis">technical analysis</a>
+
+<br />
+
+
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <div class="sect2">
+<h3 id="_overview">Overview</h3>
+<div class="paragraph">
+<p>During my
+<a href="http://www.my-rates-notebook.de/series/continuous-futures/">Continuous
+Futures</a> project I was already impressed by the capabilities of
+<code>Plotly</code> with regards to all the nice interactivity it brings to data
+visualisation. In combination with <code>Cufflinks</code> it turned out to be an
+even more powerful tool for handling financial data. A little
+drawback, at least for somebody who is a trader in the first place,
+was the tricky embedding of those Plotly objects into web based environments. Later, when I was designing on more
+complex visualisations, with different tables, graphs etc. that are
+all linked together and therefore causing a lot of dependencies, I was
+obviously missing a powerful tool to achieve that.  The solution,
+<code>Dash</code>, was such a good fit that I decided to write this article as a
+little introduction to it.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_makes_dash_so_powerful_in_financial_applications">What makes Dash so powerful in financial applications?</h3>
+<div class="paragraph">
+<p>Basically you can create web apps that completely run in the browser
+without any knowledge of HTML or JavaScript. The range of capabilities
+is quite impressive as it goes from simply hosting a Plotly graph up
+to building a front-end for an algorithmic trading system with dozens
+of dependencies, different tabs, real-time charts, PnL monitoring etc.
+It can also make those tons of circulating financial market research
+in PDF format much more interactive. Just imagine you could tweak
+those reports a little: like substitute one time-series for another,
+zoom-in to a particular area of a chart or simply hover over it to get
+the precise data reading. You could even make whole text
+phrases dependent on what assumptions the reader is making (e. g.
+growth rates, inflation or FX rates in a macroeconomic model).</p>
+</div>
+<div class="paragraph">
+<p><strong>But let’s see all this in a little example…​</strong></p>
+</div>
+<div class="paragraph">
+<p>…​based on my previous work on <code>Continuous Futures</code>. This
+series was about the implication of price gaps between
+subsequent futures contracts and how to take care of them when it
+comes to trading and research. Now we let the user explore the dataset
+on his own by letting him choose a futures position and then giving
+him immediate feedback with all the analytics from the original
+research article.
+For our Dash app, we therefore implement functionality along the following
+lines:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>User inputs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Futures contract type</p>
+</li>
+<li>
+<p>Buy or sell Futures</p>
+</li>
+<li>
+<p>Amount of contracts</p>
+</li>
+<li>
+<p>Investment period</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Output of the following figures with and without roll adjustment</p>
+<div class="ulist">
+<ul>
+<li>
+<p>PnL differences</p>
+</li>
+<li>
+<p>Closing price chart over investment period</p>
+</li>
+<li>
+<p>Candlestick charts with technical trading indicators</p>
+</li>
+<li>
+<p>Trading signal differences</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>But before we dive into the technical details of how to deploy such an
+app, let’s take a look at it:</p>
+</div>
+<div class="paragraph">
+<p><a href="https://futures-roll-carry-app.herokuapp.com/">Futures Roll &amp;
+Carry Analytics</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_basic_structure_of_a_dash_app">The basic structure of a Dash app</h3>
+<div class="paragraph">
+<p>Typically the first thing you would take care of in deploying a Dash
+app is getting a broad idea of how the layout would look like. For me
+the most convenient way to deal with that is using an <code>external style
+sheet</code> that breaks the appearance on the screen down into rows and
+columns.  Styling within that style sheet is then feasible with a Dash
+component called <code>HTML Components</code>. The content or the data you want
+to visualize will also be embedded along the coordinates of the style
+sheet, but sits in another part of the Dash library: the <code>Dash Core
+Components</code>. Those are for example drop-down menus, sliders, text
+fields, graphs, tables and many more. Now the part that links
+everything together and brings all the interactivity to it are
+<code>Callbacks</code>. Callbacks have (multiple) inputs, an automatically called
+function for the processing, and finally an output that updates the
+dashboard. This typically involves interaction with a Plotly object
+like a graph or a table. The nice thing about that is, if you are
+familiar with Plotly, the new dimension with Dash is just structuring
+how Plotly objects behave and how they interact in the context of the
+dashboard. The object itself is identical to what you already have
+done with Plotly. Now we look at the outlined building blocks of the
+app in more detail.</p>
+</div>
+<div class="sect3">
+<h4 id="_library_imports">Library imports</h4>
+<div class="paragraph">
+<p><strong>Libraries to run Dash:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">import dash
+from dash.dependencies import Input, Output, State, Event
+import dash_core_components as dcc
+import dash_html_components as html</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Additional libraries for our app:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">import plotly
+import cufflinks as cf
+import flask
+import numpy as np
+import pandas as pd
+import pickle
+from datetime import datetime as dt
+from pandas.tseries.offsets import DateOffset</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_styling_the_app">Styling the app</h4>
+<div class="paragraph">
+<p><strong>Embedding the external style sheet:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">app.css.append_css({&#39;external_url&#39;: &#39;https://cdn.rawgit.com/plotly/dash-app-stylesheets/2d266c578d2a6e8850ebce48fdb52759b2aef506/stylesheet-oil-and-gas.css&#39;})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above CSS style sheet gives our app structure that is best thought
+of as dividing everthing into rows and columns. While rows are simply
+appended, columns have to add up to 12 (e.g. 3 + 9, 5 + 5 + 2, …​).
+On each intersection of row y and column x you typically find an
+object like a graph. The illustrations below will shed some light on how CSS styling was utilized in our app.</p>
+</div>
+<div id="img-dash_styling" class="imageblock text-left">
+<div class="content">
+<img src="http://localhost:1313/blog/dash_styling.png" alt="CSS Styling for Dash" width="90%" height="100%"/>
+</div>
+<div class="title">Figure 1. CSS Styling for Dash.</div>
+</div>
+<div class="paragraph">
+<p><strong>We open the styling as follows (we make use of &#34;Dash HTML Components&#34;
+here):</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">app.layout = html.Div([
+    # Title + Description
+    html.Div(
+        [
+            html.H1(
+                &#39;Futures Carry Analytics&#39;,
+                style={&#39;font-family&#39;: &#39;Helvetica&#39;,
+                       &#34;margin-top&#34;: &#34;25&#34;,
+                       &#34;margin-bottom&#34;: &#34;0&#34;},
+            ),
+            html.P(
+                &#39;Futures are often analysed with series of spliced front contracts. This interactive dashboard shows the importance of incorporating Future rolls for PnL and technical trading analytics.&#39;,
+                style={&#39;font-family&#39;: &#39;Helvetica&#39;,
+                       &#34;font-size&#34;: &#34;120%&#34;,
+                       &#34;width&#34;: &#34;100%&#34;},
+            ),
+        ],
+        className=&#39;row&#39;
+    ),
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above code piece represents the first row of our app. All other
+rows are simply appended to the one that was defined before. We now
+skip row number two and directly go to the third one because that is a
+user input utilizing one of the <code>Dash Core Components</code>, a radio item
+in this case.</p>
+</div>
+<div class="paragraph">
+<p><strong>User chooses contract:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">...
+html.Div(
+                [
+                    html.P(&#39;Choose Contract:&#39;),
+                    dcc.RadioItems(
+                        options=[
+                            {&#39;label&#39;: &#39;Bund&#39;, &#39;value&#39;: &#39;FGBL&#39;},
+                            {&#39;label&#39;: &#39;Bobl&#39;, &#39;value&#39;: &#39;FGBM&#39;},
+                            {&#39;label&#39;: &#39;Schatz&#39;, &#39;value&#39;: &#39;FGBS&#39;}
+                            ],
+                        value=&#39;FGBL&#39;,
+                        id = &#39;radioitem_future&#39;
+                        )],
+                        className = &#39;two columns&#39;,
+                        style = {&#39;margin-top&#39;: &#39;10&#39;}
+                        )
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The code above represents the first two columns in row number three.
+The graph responding to the inputs in row three is located one row
+below.</p>
+</div>
+<div class="paragraph">
+<p><strong>Graph updating according to the user inputs:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">...
+html.Div([
+                    dcc.Graph(
+                    id=&#39;Futures Graph&#39;,
+                    )
+                ]
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All other objects are inserted into the style sheet in a similar
+fashion.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_adding_interactivity_with_callbacks">Adding interactivity with callbacks</h4>
+<div class="paragraph">
+<p>Now we add a layer to our code that connects user inputs with applying
+the needed updates on our output objects. This is done with a <code>callback
+decorator</code> that automatically calls a function whenever the state of a
+pre-defined input changes. The called function itself then updates the
+property of the output object. The callback below updates two
+time-series in the graph we have seen above that was dependent on the selection of an underlying
+future along with a selected start and end date.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">@app.callback(
+    Output(&#39;Futures Graph&#39;, &#39;figure&#39;),
+    [Input(&#39;radioitem_future&#39;, &#39;value&#39;),
+     Input(&#39;date_range_future&#39;, &#39;start_date&#39;),
+     Input(&#39;date_range_future&#39;, &#39;end_date&#39;)])
+def update_graph(value, start_date, end_date):
+    figure={
+        &#39;data&#39;: [
+            {&#39;x&#39;: data_dict[value][&#39;Front&#39;][start_date:end_date].index,
+                &#39;y&#39;: data_dict[value][&#39;Front&#39;][start_date:end_date][&#39;CLOSE&#39;],
+                &#39;type&#39;: &#39;line&#39;, &#39;name&#39;: &#39;Spliced Future&#39;},
+            {&#39;x&#39;: data_dict[&#39;%s_pan&#39; % value][start_date:end_date].index,
+                &#39;y&#39;: data_dict[&#39;%s_pan&#39; % value][start_date:end_date][&#39;CLOSE&#39;],
+                &#39;type&#39;: &#39;line&#39;, &#39;name&#39;: &#39;Roll Adjusted Future&#39;}
+            ],
+            &#39;layout&#39;: {
+                &#39;title&#39;: &#39;Spliced vs. Roll Adjusted Futures&#39;,
+                &#39;xaxis&#39;: {&#39;title&#39;: &#39;Date&#39;},
+                &#39;yaxis&#39;: {&#39;title&#39;: &#39;Futures Price&#39;}
+                }
+            }
+    return figure</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we have already everything together to make our app work.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_advanced_dash_features">Advanced Dash features</h3>
+<div class="paragraph">
+<p>Although the above steps are fully sufficient to get our app going, we
+will make use of some more advanced techniques to make it
+computationally more efficient. For that purpose we will focus on
+<code>Buttons</code> which enable controlling the launch of &#34;expensive&#34;
+computations via a dependency called <code>State</code>. Another efficiency gain
+is sharing time-consuming calculations between callbacks with a
+<code>Hidden Div</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="_buttons">Buttons</h4>
+<div class="paragraph">
+<p>Regular Dash inputs recognise a (user) change of the input object
+immediately and then kick-off the associated callback(s). In many
+cases the user specifies multiple inputs and a computation is only
+needed when all inputs are completed. The dependency <code>State</code> makes it
+now possible to fire callbacks dependent on pressing a <code>Button</code>. In
+our app we use this concept to let the user specify a futures
+position completely and only then submit it for the needed
+calculations.  Below you can see how the button was added to the
+inputs area of the dashboard:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">...
+html.Button(&#39;Submit&#39;, id=&#39;button&#39;, style={&#39;margin-top&#39;: &#39;30&#39;}),
+],
+    className = &#39;two columns&#39;,
+    style = {&#39;margin-top&#39;: &#39;10&#39;}
+    ),
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To make a callback reactive to pushing the button, we have to change
+it a bit:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">...
+@app.callback(
+    Output(&#39;Futures Graph&#39;, &#39;figure&#39;),
+    [Input(&#39;button&#39;, &#39;n_clicks&#39;)],
+    state=[State(&#39;radioitem_future&#39;, &#39;value&#39;),
+     State(&#39;date_range_future&#39;, &#39;start_date&#39;),
+     State(&#39;date_range_future&#39;, &#39;end_date&#39;)])
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maybe you have already noticed that this is the new version of the
+graph callback from above. We have simply changed <code>Input</code> to the
+button and the items that have been inputs before, are now type
+<code>State</code>. That is just holding back the execution of the function
+belonging to the callback until the button was hit.</p>
+</div>
+<div class="sect4">
+<h5 id="_sharing_data_between_callbacks">Sharing Data between Callbacks</h5>
+<div class="paragraph">
+<p>At a first glance it might look appealing to use global variables for
+shared data. As Dash is used in multi-user environments and is also
+able to run with multiple Python workers, global variables can be
+critical and should never be modified by callbacks. A better way
+is using a <code>Hidden Div</code> that uses a callback to provide calculation
+tasks that other callbacks can also use without the need for them to
+replicate those calculations themselves. The information shared is of type <code>JSON</code>. Here is the Hidden Div as
+specified in the layout section:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">...
+html.Div(id=&#39;pre-processing&#39;, style={&#39;display&#39;: &#39;none&#39;}),
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we make our &#34;complex&#34; calculations in a single callback:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">...
+@app.callback(
+Output(&#39;pre-processing&#39;, &#39;children&#39;),
+[Input(&#39;button&#39;, &#39;n_clicks&#39;)],
+state=[
+ State(&#39;radioitem_future&#39;, &#39;value&#39;),
+ State(&#39;date_range_future&#39;, &#39;end_date&#39;)])
+def preparation(n_clicks, future, end_date):
+  &#39;&#39;&#39;Now the complex calculation....&#39;&#39;&#39;
+    return json.dumps(tech_charts, cls=plotly.utils.PlotlyJSONEncoder)
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Other callbacks now make use of it as simple as that:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">...
+@app.callback(
+    Output(&#39;Spliced Technical Graph&#39;, &#39;figure&#39;),
+    [Input(&#39;pre-processing&#39;, &#39;children&#39;)])
+def update_graph(json_file):
+    figure = json.loads(json_file)
+    figure = figure[&#39;spliced&#39;]
+    return figure
+...</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deploying_dash_apps">Deploying Dash Apps</h3>
+<div class="paragraph">
+<p>By default your Dash app runs on <code>Localhost</code>. This means it is only
+available on your own machine. Typically you will use this mode in
+development and for testing. As soon as you want to make your app
+public, it has to sit on a server that is open for outside access. To
+make this happen, Dash uses <code>Flask</code> which in turn is supported by a wide
+range of cloud server providers. On the Dash website you can find a
+nice <a href="https://dash.plot.ly/deployment/">tutorial</a> on how to
+&#34;deploy&#34; with <code>Heroku</code>.</p>
+</div>
+<div class="paragraph">
+<p>I hope you have enjoyed reading this little tutorial and you are more
+than welcome to get in touch via the comment section or a personal
+message.</p>
+</div>
+</div>
+
+                   
+
+                  <div id="disqus_thread"></div>
+<script>
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://larnsce.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/by/disqus_kCCDxZNXRg/">comments powered by Disqus.</a></noscript>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:oliverkahl@gmx.de">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/KahlOliver">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.linkedin.com/in/oliver-kahl-cfa-20077039/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.xing.com/profile/Oliver_Kahl8/cv/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-xing fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Code released under the Apache 2.0 license.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://localhost:1313/blog//js/jquery.min.js"></script>
+
+    
+    <script src="http://localhost:1313/blog//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://localhost:1313/blog//js/clean-blog.js"></script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+</body>
+
+</html>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+

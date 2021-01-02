@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cash vs. Physical on My Rates Notebook.</title>
+    <link>http://localhost:1313/blog/tags/cash-vs.-physical/</link>
+    <description>Recent content in Cash vs. Physical on My Rates Notebook.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Code released under the Apache 2.0 license.</copyright>
+    <lastBuildDate>Wed, 07 Nov 2018 12:54:17 +0200</lastBuildDate><atom:link href="http://localhost:1313/blog/tags/cash-vs.-physical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Collateralized Cash Price --- An introduction to the new settlement standard in Swaptions</title>
+      <link>http://localhost:1313/blog/post/cash_physical_intro/</link>
+      <pubDate>Wed, 07 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/cash_physical_intro/</guid>
+      <description>Overview For years the Euro Swaption Market was split into two major types of settlement methods: one being Physical and the other one being a cash settlement based on an Internal Rate of Return (IRR). The latter was causing that many serious valuation problems recently that a new market standard will be established, effective from 26th November 2018 onwards, where the IRR will be &amp;#34;swapped&amp;#34; for a discount rate associated with collateralized swap contracts: a Collateralized Cash Price (CCP).</description>
+    </item>
+    
+    <item>
+      <title>Collateralized Cash Price --- A consistent pricing framework (part I)</title>
+      <link>http://localhost:1313/blog/post/cash_physical_part_i/</link>
+      <pubDate>Sat, 26 May 2018 12:53:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/cash_physical_part_i/</guid>
+      <description>Overview With the change in the market standard cash settlement convention from an Internal Rate of Return (IRR) approach to Cash Collateralized Price (CCP), effective in September or October 2018, remains a bit of a challenge to put legacy trades, forthcoming new-style transactions, and physically settled contracts into a consisting pricing framework.
+ In this small series we will present a Python implementation in which all mentioned trades are valued in an arbitrage free fashion.</description>
+    </item>
+    
+    <item>
+      <title>Collateralized Cash Price --- A consistent pricing framework (part II)</title>
+      <link>http://localhost:1313/blog/post/cash_physical_part_ii/</link>
+      <pubDate>Sat, 26 May 2018 12:51:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/cash_physical_part_ii/</guid>
+      <description>Overview In the previous article, we gathered all the data needed. We will now utilize that information to calibrate our model. As it takes some functions and dependencies, our approach will be to put all the calibration code into three classes. In that regard we will have an &amp;#34;ImpliedVol&amp;#34; class, which does the vol implication from premiums. Also we have a superclass &amp;#34;CashPhyATM&amp;#34;, doing the basic calibration for ATM data. There is a subclass to &amp;#34;CashPhyATM&amp;#34;, called &amp;#34;CashPhyOTM&amp;#34;, calculating all the OTM values.</description>
+    </item>
+    
+    <item>
+      <title>Collateralized Cash Price --- A consistent pricing framework (part III)</title>
+      <link>http://localhost:1313/blog/post/cash_physical_part_iii/</link>
+      <pubDate>Sat, 26 May 2018 12:43:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/cash_physical_part_iii/</guid>
+      <description>Overview In the previous article we calibrated cash IRR payer, cash IRR receiver and physical vols in the physical measure. These sets of vols allowed us to value all settlement types in an arbitrage-free fashion. Nevertheless, what we were still lacking, was a complete vol cube for every single settlement type. As it is well known that &amp;#34;regular&amp;#34; interpolation techniques fail with respect that they are not proven to be free of arbitrage, we select the SABR model as a popular choice for completing the vol cube.</description>
+    </item>
+    
+  </channel>
+</rss>

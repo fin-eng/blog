@@ -8,22 +8,57 @@
   </url>
   
   <url>
+    <loc>https://fin-eng.github.io/blog/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://fin-eng.github.io/blog/tags/plotly/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://fin-eng.github.io/blog/post/</loc>
-    <lastmod>2020-02-29T12:54:17+02:00</lastmod>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://fin-eng.github.io/blog/tags/rates/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://fin-eng.github.io/blog/post/time_lapse_2020/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://fin-eng.github.io/blog/tags/swaps/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://fin-eng.github.io/blog/tags/swaptions/</loc>
-    <lastmod>2020-02-29T12:54:17+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://fin-eng.github.io/blog/post/estr_discounting_swaptions/</loc>
-    <lastmod>2020-02-29T12:54:17+02:00</lastmod>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://fin-eng.github.io/blog/tags/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://fin-eng.github.io/blog/tags/visualisation/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://fin-eng.github.io/blog/tags/volatility/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://fin-eng.github.io/blog/post/estr_discounting_swaptions/</loc>
     <lastmod>2020-02-29T12:54:17+02:00</lastmod>
   </url>
   
@@ -39,16 +74,6 @@
   
   <url>
     <loc>https://fin-eng.github.io/blog/tags/dash/</loc>
-    <lastmod>2018-11-27T12:54:17+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://fin-eng.github.io/blog/tags/data-visualization/</loc>
-    <lastmod>2018-11-27T12:54:17+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://fin-eng.github.io/blog/tags/plotly/</loc>
     <lastmod>2018-11-27T12:54:17+02:00</lastmod>
   </url>
   
@@ -115,11 +140,6 @@
   <url>
     <loc>https://fin-eng.github.io/blog/post/continuous_futures_part2/</loc>
     <lastmod>2018-05-26T12:34:17+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://fin-eng.github.io/blog/</loc>
-    <lastmod>2015-05-24T18:51:50+02:00</lastmod>
   </url>
   
   <url>

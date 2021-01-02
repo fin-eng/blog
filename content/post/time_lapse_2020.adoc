@@ -1,0 +1,127 @@
++++
+date = "2020-12-30"
+tags = ["rates", "volatility", "swaptions", "swaps", "plotly", "visualisation"]
+title= "Rates, Volatility and the Virus: Visualisations of key market drivers in 2020"
+plotly= "true"
+description = "We make a visual recap of 2020 in the rates market. For this we utilize the Plotly package and its various interactive figures."
++++
+=== Overview
+In 2020 we had some unprecedented movements in global markets coming from the
+`Covid-19` pandemic. Initially the hit to asset prices was tremendous and
+volatility got to highs not seen for a long time. For a moment, the paradigm
+of putting on a carry trades in all asset classes, seemed completely vanished. But
+this short glimpse at how market forces could reach new equilibrium price
+levels, was just not bearable for institutions in developed capital markets.
+After years of ever increasing balance sheets of all mayor central banks, new
+and yet bigger stimulus was again the subscription. The path forward was clear:
+central banks stepped in and bought up virtually everything, and with their
+hands tied at the lower bound in rate setting, this time governments also
+joined the spending party. Investors quickly got the message: carry, buying the
+dip and leverage were again top of the agenda. For the rates market that meant
+more of the same from previous years: rock bottom interest rates and
+volatility. But let us now have a closer look at how this all played out after
+a short layout of our style of presentation.
+
+=== Why a visual and interactive recap of 2020?
+Before writing this blog post I had in mind the tons of research banks produce
+when the year comes to a close. What I wanted to make different, was the static
+nature of all this. Sure thing, researcher can pick interesting points and
+visually present it to their readers. But that is always a subjective choice.
+So wouldn't it be nice to just slice through every trading day of the year by
+yourself and pick interesting things on your own? Or have the whole year played
+as an animation in as little as one minute time to grasp the dynamics? So I put
+on some animations, interactive charts which are a bit more "explorable". So
+let's get started.
+
+=== Swap Curves and Basis
+Our first chart is the `EUR yield curve` in 2020. The below chart has data points
+for all trading days in 2020 and can be slid through with the slider at the
+bottom of the figure. It can also be played as an animation. While the yield
+curves way to new lows by trading below zero in almost it's entirety, is quite
+remarkable. Also the narrowing of the basis between 3M and 6M curve is worth
+mentioning. But see all this below:
+++++
+{{% plot plot2 %}}
+fig = {{% readfile file="/static/swap_curves.json" %}}
+{{% /plot %}}
+++++
+{empty} +
+For the narrowing it is quite interesting to look at how the curves underlying
+`fixings` actually evolved throughout the year:
+++++
+{{% plot plot3 %}}
+fig = {{% readfile file="/static/euribor_fixings.json" %}}
+{{% /plot %}}
+++++
+{empty} +
+
+=== Swaption Volatility
+Next thing we want to look at is `rates volatility` in the `swaption market`. Here
+we also have all data points, a slider, and the ability to play the whole thing
+as an animation. With regards to what happens, the overall bid to vol from
+Covid-19 is clearly the most remarkable. Breaking it down, it mostly hits short
+expiries and long tails, coming from the fear of massive flattening in the yield
+curve. On the contrary, volatility on short tails (top left) was staying
+relatively low, as rate cutting room for the ECB was perceived limited. After
+the storm passed, stimulus measures did their job, and more time went by
+towards years end, new lows were reached in rates volatility.
+++++
+{{% plot plot4 %}}
+fig = {{% readfile file="/static/ATM_surface.json" %}}
+{{% /plot %}}
+++++
+{empty} +
+Another interesting thing to look at is what was `implied` in volatility during
+the year and what actually `realized`. Here you can look at different expiry
+times and tail combinations, just like on the swaption surface above. Only
+difference this time is that we compare an ex-post, what has realized, with an
+ex-ante measure (implied). Below we see this comparison for 1m10y:
+++++
+{{% plot plot5 %}}
+fig = {{% readfile file="/static/implied_realized_1m10y.json" %}}
+{{% /plot %}}
+++++
+{empty} +
+Now we can compute the `ratio of implied and realized volatility`. A ratio below
+1 indicates a buy signal.  Below this is done for various expiry / tail
+combinations. As before, the data set is explorable by a slider and can be
+played as an animation as well. I think this data set gives a good feeling for
+the dynamics of how the underlying actually moved and what was implied
+throughout the year.
+++++
+{{% plot plot6 %}}
+fig = {{% readfile file="/static/implied_realized_heatmap.json" %}}
+{{% /plot %}}
+++++
+{empty} +
+A final thing we want to look at is `skew`. It is interesting because it gives a
+sense of what the volatility market is charging for payer and receiver
+swaptions. That can in turn give us a hint at what the market is expecting from
+interest rates in the future (e. g. expensive payer swaptions vs. cheaper
+receiver swaptions are showing that market participants are protecting against
+rising interest rates). To see what has changed during the course of the year,
+we take beginning of year values and compare it to the most recent data. That
+should give us an indication of what has changed through Covid-19 and other
+events in 2020 in terms of expected interest rate movement in the future (or at
+least where protection buying is more expensive). Below we have various plots
+where we compare skew at the beginning and at the end of the year. This time we
+only have hover effects and no sliders and animation (maybe a project for the
+end of 2021 ;) ). What clearly comes out is that protection against up and down
+movements have both become more expensive (steeper skew). And for longer tails,
+the payer side has become even more expensive. So probably the market is
+looking at steeper yield curves.
+++++
+{{% plot plot7 %}}
+fig = {{% readfile file="/static/skew.json" %}}
+{{% /plot %}}
+++++
+{empty} +
+
+=== Outlook
+As a final remark I wanted to highlight that
+this blog post was meant to show capabilities of technology for visualisation
+purposes first. So clearly, the dive into the research aspects could have been
+deeper. But I would be more than happy if you get in touch and want to discuss
+this area more thoroughly, as well as, of course, the technological matters of
+the outlined material. For me personally, I will definitely dig deeper in this
+interactive figures and also customized dashboards.

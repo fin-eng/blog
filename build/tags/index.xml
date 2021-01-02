@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on My Rates Notebook.</title>
+    <link>http://localhost:1313/blog/tags/</link>
+    <description>Recent content in Tags on My Rates Notebook.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Code released under the Apache 2.0 license.</copyright>
+    <lastBuildDate>Wed, 23 Dec 2020 12:34:17 +0200</lastBuildDate><atom:link href="http://localhost:1313/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Swaptions</title>
+      <link>http://localhost:1313/blog/tags/swaptions/</link>
+      <pubDate>Wed, 23 Dec 2020 12:34:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/swaptions/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Visualisation</title>
+      <link>http://localhost:1313/blog/tags/visualisation/</link>
+      <pubDate>Wed, 23 Dec 2020 12:34:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/visualisation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Volatility</title>
+      <link>http://localhost:1313/blog/tags/volatility/</link>
+      <pubDate>Wed, 23 Dec 2020 12:34:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/volatility/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cufflinks</title>
+      <link>http://localhost:1313/blog/tags/cufflinks/</link>
+      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/cufflinks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Dash</title>
+      <link>http://localhost:1313/blog/tags/dash/</link>
+      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/dash/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Data Visualization</title>
+      <link>http://localhost:1313/blog/tags/data-visualization/</link>
+      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/data-visualization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Plotly</title>
+      <link>http://localhost:1313/blog/tags/plotly/</link>
+      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/plotly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>http://localhost:1313/blog/tags/python/</link>
+      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Quant Trading</title>
+      <link>http://localhost:1313/blog/tags/quant-trading/</link>
+      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/quant-trading/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Technical Analysis</title>
+      <link>http://localhost:1313/blog/tags/technical-analysis/</link>
+      <pubDate>Tue, 27 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/technical-analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cash vs. Physical</title>
+      <link>http://localhost:1313/blog/tags/cash-vs.-physical/</link>
+      <pubDate>Wed, 07 Nov 2018 12:54:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/tags/cash-vs.-physical/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

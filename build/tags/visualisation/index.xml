@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Visualisation on My Rates Notebook.</title>
+    <link>http://localhost:1313/blog/tags/visualisation/</link>
+    <description>Recent content in Visualisation on My Rates Notebook.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Code released under the Apache 2.0 license.</copyright>
+    <lastBuildDate>Wed, 23 Dec 2020 12:34:17 +0200</lastBuildDate><atom:link href="http://localhost:1313/blog/tags/visualisation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>EUR Rates &amp; Volatility -- A visual retrospective on 2020</title>
+      <link>http://localhost:1313/blog/post/time_lapse_2020/</link>
+      <pubDate>Wed, 23 Dec 2020 12:34:17 +0200</pubDate>
+      
+      <guid>http://localhost:1313/blog/post/time_lapse_2020/</guid>
+      <description>Overview In the first article of this mini series we talked about building Continuous Futures which satisfy our requirements for deriving consistent PnL figures for our position keeping, as well as generating trading signals not effected by roll gaps between contracts. A solution of simply splicing contracts after each other clearly didn’t qualify, and we came up with the Panama Method being the closest to an ideal time-series for our data set of German Government Bonds (Schatz, Bobl, Bund).</description>
+    </item>
+    
+  </channel>
+</rss>

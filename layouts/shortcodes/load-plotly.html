@@ -1,0 +1,5 @@
+{{ printf "%#v" . }}
+{{ if not ($.Page.Scratch.Get "plotlyloaded") }}
+  {{ $.Page.Scratch.Set "plotlyloaded" 1 }}
+  <script src="https://cdn.plot.ly/plotly-1.50.0.min.js"></script>
+{{ end }}

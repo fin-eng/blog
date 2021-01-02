@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head><script src="/livereload.js?port=1313&amp;mindelay=10&amp;v=2" data-no-instant defer></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Collateralized Cash Price --- A consistent pricing framework (part II) -- My Rates Notebook.</title>
+
+    
+
+    
+    <link href="http://localhost:1313/blog//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://localhost:1313/blog//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://localhost:1313/blog/">My Rates Notebook.</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://localhost:1313/blog/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://localhost:1313/blog/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://localhost:1313/blog/post/">Archives</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    
+    <header class="intro-header" style="background-image: url('http://localhost:1313/blog//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Collateralized Cash Price &mdash; A consistent pricing framework (part II)</h1>
+               <h2 class="subheading">We discuss the calibration of a consistent model to price cash IRR, CCP and physical settled swaptions.</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Oliver Kahl</a> on Sat, May 26, 2018
+<br />
+Tags: <a href="http://localhost:1313/blog/tags/swaptions">swaptions</a>, <a href="http://localhost:1313/blog/tags/python">python</a>, <a href="http://localhost:1313/blog/tags/cash-vs.-physical">cash vs. physical</a>
+
+<br />
+
+   Series: <a href="http://localhost:1313/blog/series/cash-vs.-physical-swaptions">Cash vs. Physical Swaptions</a>
+
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <div class="sect2">
+<h3 id="_overview">Overview</h3>
+<div class="paragraph">
+<p>In the previous article, we gathered all the data needed. We will now
+utilize that information to calibrate our model. As it takes some
+functions and dependencies, our approach will be to put all the
+calibration code into three classes. In that regard we will have an
+&#34;ImpliedVol&#34; class, which does the vol implication from premiums. Also
+we have a superclass &#34;CashPhyATM&#34;, doing the basic calibration for ATM
+data. There is a subclass to &#34;CashPhyATM&#34;, called &#34;CashPhyOTM&#34;,
+calculating all the OTM values. The rest of our work will be done in a
+Jupyter Notebook. For our modelling we use Pietersz and Sengers
+&#34;Cash-settled swaptions: A new pricing model&#34;.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_vol_implication">Vol Implication</h3>
+<div class="paragraph">
+<p>The first step will be the implying of a shifted-log-normal volatility
+for all the premiums we collected this far. For this we will use the
+paper from Jaeckel (see references below). As a reminder our input
+DataFrame, &#34;cash_prem&#34;, looks like this:</p>
+</div>
+<div id="img-master_df" class="imageblock">
+<div class="content">
+<img src="http://localhost:1313/blog/master_df.png" alt="Master DataFrame" width="750" height="500"/>
+</div>
+<div class="title">Figure 1. Cash premiums going into vol implication.</div>
+</div>
+<div class="paragraph">
+<p>In principal we now iterate over our &#34;cash_prem&#34; DataFrame, to
+transform all the premiums into vols and print it back to a new,
+&#34;vols&#34;, DataFrame. The following piece will do this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">for line in cash_prem.itertuples():
+    for col in cash_prem.columns[5:]:
+        if np.isnan(cash_prem[col][line.Index]):
+            continue
+        if type(col) == float:
+            if col &lt; 0:
+                vols[col][line.Index] = ImpliedVol(
+                                            (cash_prem[col][line.Index]
+                                            /\ cash_prem[&#39;Ann Cash&#39;][line.Index]
+                                                 * cash_prem[&#39;DF&#39;][line.Index]),
+                                             cash_prem[&#39;Fwd&#39;][line.Index],
+                                             cash_prem[&#39;Shift&#39;][line.Index],
+                                             cash_prem[&#39;Fwd&#39;][line.Index] + col / 10000,
+                                             line.Index[0] / 12,
+                                             &#39;put&#39;
+                                                ).implied_volatility()
+            else:
+                vols[col][line.Index] = ImpliedVol(
+                                            (cash_prem[col][line.Index]\
+                                            / cash_prem[&#39;Ann Cash&#39;][line.Index]
+                                                 * cash_prem[&#39;DF&#39;][line.Index]),
+                                             cash_prem[&#39;Fwd&#39;][line.Index],
+                                             cash_prem[&#39;Shift&#39;][line.Index],
+                                             cash_prem[&#39;Fwd&#39;][line.Index] + col / 10000,
+                                             line.Index[0] / 12,
+                                             &#39;call&#39;
+                                                ).implied_volatility()
+        else:
+            if &#39;ATM Cash Rec&#39; in col:
+                vols[col][line.Index] = ImpliedVol(
+                                            (cash_prem[col][line.Index]\
+                                            / cash_prem[&#39;Ann Cash&#39;][line.Index]
+                                                 * cash_prem[&#39;DF&#39;][line.Index]),
+                                             cash_prem[&#39;Fwd&#39;][line.Index],
+                                             cash_prem[&#39;Shift&#39;][line.Index],
+                                             cash_prem[&#39;Fwd&#39;][line.Index],
+                                             line.Index[0] / 12,
+                                             &#39;put&#39;
+                                                ).implied_volatility()
+            if &#39;ATM Cash Pay&#39; in col:
+                vols[col][line.Index] = ImpliedVol(
+                                            (cash_prem[col][line.Index]\
+                                            / cash_prem[&#39;Ann Cash&#39;][line.Index]
+                                                 * cash_prem[&#39;DF&#39;][line.Index]),
+                                             cash_prem[&#39;Fwd&#39;][line.Index],
+                                             cash_prem[&#39;Shift&#39;][line.Index],
+                                             cash_prem[&#39;Fwd&#39;][line.Index],
+                                             line.Index[0] / 12,
+                                             &#39;call&#39;
+                                                ).implied_volatility()
+            if &#39;ATM Phy&#39; in col:
+                vols[col][line.Index] = ImpliedVol(
+                                            (cash_prem[col][line.Index]\
+                                            / cash_prem[&#39;PVBP&#39;][line.Index]
+                                                 * cash_prem[&#39;DF&#39;][line.Index]),
+                                             cash_prem[&#39;Fwd&#39;][line.Index],
+                                             cash_prem[&#39;Shift&#39;][line.Index],
+                                             cash_prem[&#39;Fwd&#39;][line.Index],
+                                             line.Index[0] / 12,
+                                             &#39;put&#39;
+                                                ).implied_volatility()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With that being done, we have a full ATM vol surface for ATM physical,
+ATM IRR receiver, and ATM IRR payer swaptions (all at the physical
+forward). Note that we have also calibrated vols for OTM strikes in
+IRR swaptions, but due to the lack of more information those surfaces
+are far from being &#34;complete&#34;. At this stage we also have no
+information on physical smile data. But let’s inspect something, which
+is already complete, namely the ATM physical swaption surface:</p>
+</div>
+<div id="img-ATM_phy_vol" class="imageblock text-left">
+<div class="content">
+<img src="http://localhost:1313/blog/ATM_physical_swaption_surface.png" alt="ATM physical swaption surface" width="100%" height="100%"/>
+</div>
+<div class="title">Figure 2. ATM physical swaption surface.</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_align_cash_irr_and_physical_cash_ccp_vols">Align cash IRR and physical (cash CCP) vols</h3>
+<div class="sect3">
+<h4 id="_description_of_the_approach">Description of the approach</h4>
+<div class="paragraph">
+<p>Thus far we did nothing more than a regular (shifted) Black log-normal
+vol implication. The &#34;CashPhyATM&#34; superclass and it’s &#34;CashPhyOTM&#34;
+subclass will now be our working horse to get all swaptions, namely
+cash IRR and physical (and CCP as being equivalent), aligned in an
+arbitrage free fashion.</p>
+</div>
+<div class="paragraph">
+<p>But let’s have a look at the basic idea of Pietersz and Sengers for
+modeling the above. They start with two processes, which financially
+turn out to be the sum of discount factors (present value of a basis
+point (PVBP)) and the EURIBOR forwards (y) for all the considered
+periods. On top of that, they consider another process, y*, such that
+the PVBP process is a constant scalar times the cash-annuity of y*. As
+outlined by Pietersz and Sengers, we start the PVBP process with it’s
+value as of today and model it with shifted log-normal dynamics. In
+the following we refer to y and y* – in analogy to Pietersz and
+Sengers – with the terms forecast forward rate and discount forward
+rate respectively. The forthcoming modeling will be done with 4
+parameters in our shifted log-normal framework: forecast sigma and
+forecast shift for y and discount sigma and discount shift for y*.</p>
+</div>
+<div class="paragraph">
+<p>From that framework a new put-call-parity relation for for IRR
+swaptions at the convexity adjusted forward/ PVBP (Fwd*/ PVBP*) can be
+obtained. We use that relation to arrive at prices for the various
+swaptions not observed in the market. Eventually, we get vols for IRR
+payer/ receiver and physical, which can then be further processed by a
+SABR model (next article) to complete the vol cube.</p>
+</div>
+<div class="paragraph">
+<p>Let’s sum up what we already have before calibration:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ATM physical-settled vols</p>
+</li>
+<li>
+<p>ATM IRR settled vols</p>
+</li>
+<li>
+<p>OTM IRR settled vols</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>And this is what we will compute in the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Discount/ cash-settled forwards (where put-call-parity holds for IRR
+settlement)</p>
+</li>
+<li>
+<p>Discount/ cash-settled displacement</p>
+</li>
+<li>
+<p>Discount/ cash-settled ATM vol (at the discount/ cash-settled
+forward)</p>
+</li>
+<li>
+<p>Discount/ cash-settled PVBP</p>
+</li>
+<li>
+<p>OTM physical-settled vols</p>
+</li>
+<li>
+<p>ITM physical-settled vols</p>
+</li>
+<li>
+<p>ITM IRR settled vols</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The &#34;vols&#34; DataFrame representation of the above now looks like this:</p>
+</div>
+<div id="img-cash_phy_input" class="imageblock">
+<div class="content">
+<img src="http://localhost:1313/blog/cash_phy_cal_input.PNG" alt="Cash Phy ATM" width="100%"/>
+</div>
+<div class="title">Figure 3. Cash/ physical ATM calibration input.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_atm_calibration">ATM calibration</h4>
+<div class="paragraph">
+<p>The following shows, how we iterate over the &#34;vols&#34; DataFrame and call
+the respective methods from the &#34;CashPhyATM&#34; class, to obtain the
+above sketched out measures with regard to the ATM point:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">for line in vols.itertuples():
+    if line[11] == line[12]:
+        vols[&#39;ATM Cash*&#39;][line.Index[0]][line.Index[1]] = line[11]
+        vols[&#39;Shift*&#39;][line.Index[0]][line.Index[1]] = line[4]
+        vols[&#39;PVBP*&#39;][line.Index[0]][line.Index[1]] = line[6]
+        vols[&#39;Fwd*&#39;][line.Index[0]][line.Index[1]] = line[2]
+        vols[&#39;ATM PCC&#39;][line.Index[0]][line.Index[1]] = 0
+    else:
+        cash_phy_atm_calib = CashPhyATM(line[12], line[11], line.Index[0] / 12, line[4],
+                                        line[2], line[8], line[9], int(line.Index[1] / 12))
+        vols[&#39;ATM Cash*&#39;][line.Index[0]][line.Index[1]]\
+            = cash_phy_atm_calib.vol_atm_cash
+        vols[&#39;Shift*&#39;][line.Index[0]][line.Index[1]]\
+            = cash_phy_atm_calib.cash_settled_displacement
+        vols[&#39;PVBP*&#39;][line.Index[0]][line.Index[1]]\
+            = cash_phy_atm_calib.get_convexity_adjusted_pvbp()
+        vols[&#39;Fwd*&#39;][line.Index[0]][line.Index[1]]\
+            = cash_phy_atm_calib.get_convexity_adjusted_forward()
+        vols[&#39;ATM PCC&#39;][line.Index[0]][line.Index[1]]\
+            = cash_phy_atm_calib.get_put_call_combo_value()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we have added all calibrated ATM parameters to our DataFrame.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_otm_calibration">OTM calibration</h4>
+<div class="paragraph">
+<p>In the next step, we move away from the ATM point and calibrate all
+our grid points for OTM, where we observe market quotes. By using
+put-call-parity we also compute ITM swaptions for these points.
+Additionally, we calculate physical smile data, an area where market
+prices are not observable. Before we start, we reorganise the
+target DataFrame a bit, to better serve our needs. We call this
+DataFrame &#34;vols_sabr_in&#34; as it is the basis for applying the SABR
+model in the next article. Basically we add a type flag to our
+MultiIndex, which indicates whetver we have a &#34;cash IRR receiver&#34;, a
+&#34;cash IRR payer&#34; or a &#34;physical&#34; vol. In it’s empty form the DataFrame
+now looks like this:</p>
+</div>
+<div id="img-sabr_cal_input" class="imageblock">
+<div class="content">
+<img src="http://localhost:1313/blog/sabr_cal_input.PNG" alt="Cash Phy ATM" width="100%" height="100%"/>
+</div>
+<div class="title">Figure 4. Cash/ physical OTM calibration input (goes into SABR calibration later)</div>
+</div>
+<div class="paragraph">
+<p>The following piece of code in combination with the &#34;CashPhyOTM&#34; class
+will fill the &#34;vols_sabr_in&#34; DataFrame for us:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">for line in vols.itertuples():
+    for strike_number, strike_offset in enumerate(vols_sabr_in.columns[2:].values):
+        if strike_offset &lt; 0:
+            if np.isnan(line[14 + strike_number]):
+                pass
+            else:
+                cash_phy_otm_calib = CashPhyOTM(line.Index[0] / 12, line[4], line[2],
+                                                line[8], line[9],
+                                                int(line.Index[1] / 12), &#39;put&#39;,
+                                                strike_offset / 10000,
+                                                line[14 + strike_number],
+                                                line[10], line[5], line[13], line[7])
+                vols_sabr_in[strike_offset][&#39;Phy&#39;][line.Index[0]][line.Index[1]],\
+                vol_cash_star = cash_phy_otm_calib.calibrate_cash_model()
+                vols_sabr_in[strike_offset][&#39;Pay&#39;][line.Index[0]][line.Index[1]] =
+                cash_phy_otm_calib.get_implied_vol(
+                                        &#39;call&#39;, line[5], vol_cash_star,
+                    vols_sabr_in[strike_offset][&#39;Phy&#39;][line.Index[0]][line.Index[1]]
+                                                                    )
+        if strike_offset &gt; 0:
+            if np.isnan(line[13 + strike_number]):
+                pass
+            else:
+                cash_phy_otm_calib = CashPhyOTM(line.Index[0] / 12, line[4], line[2],
+                                                line[8], line[9], int(line.Index[1] / 12),
+                                                &#39;call&#39;, strike_offset / 10000,
+                                                line[13 + strike_number],
+                                                line[10], line[5], line[13], line[7])
+                vols_sabr_in[strike_offset][&#39;Phy&#39;][line.Index[0]][line.Index[1]],\
+                vol_cash_star = cash_phy_otm_calib.calibrate_cash_model()
+                try:
+                    vols_sabr_in[strike_offset][&#39;Rec&#39;][line.Index[0]][line.Index[1]] =\
+                    cash_phy_otm_calib.get_implied_vol(
+                                            &#39;put&#39;, line[5], vol_cash_star,
+                        vols_sabr_in[strike_offset][&#39;Phy&#39;][line.Index[0]][line.Index[1]]
+                                                                        )
+                except ValueError:
+                    vols_sabr_in[strike_offset][&#39;Rec&#39;][line.Index[0]][line.Index[1]] = np.nan
+                    print(line.Index[0] / 12, int(line.Index[1] / 12),
+                          strike_offset, &#34;Receiver value through intrinsic&#34;)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we have milked our model dry in a sense that we have calibrated as
+many vols as we could get from market premiums in combination with
+what the model is able to do for us.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_visual_inspection_of_the_calibrated_data">Visual inspection of the calibrated data</h3>
+<div class="paragraph">
+<p>Now we essentially have three types of vols at the physical measure:
+cash IRR receiver, cash IRR payer and physical (cash CCP). That is
+exactly what we were after. So let’s inspect how the different vols
+relate to each other:</p>
+</div>
+<div id="img-10y10y_smile" class="imageblock text-left">
+<div class="content">
+<img src="http://localhost:1313/blog/10y10y_swaption_smile.png" alt="10y10y swaption smile" width="800" height="600"/>
+</div>
+<div class="title">Figure 5. 10y10y swaption smile with different settlement types.</div>
+</div>
+<div class="paragraph">
+<p>Note that if we would move to the cash IRR measure, we would observe different vols for payer and receiver for physical settlement. Therefore another interesting comparison in that space is, how physical and cash IRR forwards relate to each other. The following is a table of cash IRR forwards over physical forwards in BP:</p>
+</div>
+<div id="img-cash_over_phy_forwards" class="imageblock">
+<div class="content">
+<img src="http://localhost:1313/blog/cash_over_phy_fwds.PNG" alt="cash over phy forwards" width="100%" height="100%"/>
+</div>
+<div class="title">Figure 6. Convexity adjusted cash IRR Forwards over physical forwards in BP.</div>
+</div>
+<div class="paragraph">
+<p>We see that the convexity adjustment is most pronounced on the bottom
+right of the table (which corresponds well with how zero-wide-collar
+prices are distributed).</p>
+</div>
+<div class="paragraph">
+<p>As we have now completed the calibration for every spot where a market
+price has been observed the next logical step would be to complete the
+whole vol cube. As &#34;regular&#34; interpolation techniques are known to
+fail with respect to arbitrage concerns, a typical choice to arrive at
+a robust cube, is the SABR model. This is exactly what will be done in
+the next article.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_references">References</h3>
+<div class="paragraph">
+<p>Pietersz and Sengers: &#34;Cash-settled swaptions: A new pricing model&#34;</p>
+</div>
+<div class="paragraph">
+<p>Jaeckel: &#34;By Implication&#34;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_downloads">Downloads</h3>
+<div class="paragraph">
+<p><a href="https://www.icloud.com/iclouddrive/0dheBGT5FInwZriY9cDREilcQ#Cash_Phy_Cal">Jupyter Notebook</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.icloud.com/iclouddrive/0siyCpWsFFyHU3IxW4nfzswdw#cash_physical_model">Cash
+Physical Model</a></p>
+</div>
+</div>
+
+                  
+    
+    <hr/>
+	<p><a href="" id="series"></a>This is a post in the 
+	<b>Cash vs. Physical Swaptions</b> series.<br/>
+	Other posts in this series:</p>
+
+    
+    
+    <ul class="series">
+    
+    	<li>Nov 07, 2018 -
+    	<a href="http://localhost:1313/blog/post/cash_physical_intro/">Collateralized Cash Price &mdash; An introduction to the new settlement standard in Swaptions</a></li>
+    
+    	<li>May 26, 2018 -
+    	<a href="http://localhost:1313/blog/post/cash_physical_part_i/">Collateralized Cash Price &mdash; A consistent pricing framework (part I)</a></li>
+    
+    	<li>May 26, 2018 -
+    	<a href="http://localhost:1313/blog/post/cash_physical_part_ii/">Collateralized Cash Price &mdash; A consistent pricing framework (part II)</a></li>
+    
+    	<li>May 26, 2018 -
+    	<a href="http://localhost:1313/blog/post/cash_physical_part_iii/">Collateralized Cash Price &mdash; A consistent pricing framework (part III)</a></li>
+    
+    </ul>
+ 
+
+                  <div id="disqus_thread"></div>
+<script>
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://larnsce.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/by/disqus_kCCDxZNXRg/">comments powered by Disqus.</a></noscript>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:oliverkahl@gmx.de">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://twitter.com/KahlOliver">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.linkedin.com/in/oliver-kahl-cfa-20077039/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.xing.com/profile/Oliver_Kahl8/cv/">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-xing fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Code released under the Apache 2.0 license.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://localhost:1313/blog//js/jquery.min.js"></script>
+
+    
+    <script src="http://localhost:1313/blog//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://localhost:1313/blog//js/clean-blog.js"></script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-123-45', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+</body>
+
+</html>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
